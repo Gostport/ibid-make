@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Words — Ibid — Blossom Words</title>
+<style>
+  :root{
+    --ink:#100d18;
+    --ink2:#171223;
+    --parchment:#d8c9a8;
+    --parchment-dim:#9c8f74;
+    --gold:#c9a24d;
+    --fog:#8f8a9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #221a38 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 8px}
+  .kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--fog);margin-bottom:18px}
+  h1{font-size:clamp(36px,7vw,64px);font-weight:400;letter-spacing:6px;text-shadow:0 0 40px rgba(201,162,77,.3)}
+  .sub{color:var(--fog);font-style:italic;margin-top:10px}
+  .entry{
+    display:flex;gap:24px;align-items:flex-start;
+    background:var(--ink2);border:1px solid #33294a;border-radius:10px;
+    padding:24px;margin-top:28px;position:relative;text-decoration:none;color:inherit;
+    transition:border-color .2s;
+  }
+  .entry:hover{border-color:var(--gold)}
+  .entry::before{
+    content:"";position:absolute;top:0;left:24px;right:24px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  .thumb{flex:0 0 220px}
+  .thumb img{width:100%;border-radius:8px;border:1px solid #33294a;display:block}
+  .meta{flex:1;min-width:0}
+  .date{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--fog)}
+  .word{font-size:34px;letter-spacing:5px;color:var(--parchment);margin:6px 0 4px}
+  .phon{font-style:italic;color:var(--parchment-dim);font-size:15px}
+  .line{margin-top:10px;font-size:16px;color:#cfc2a2}
+  .go{margin-top:12px;font-size:13px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+  @media (max-width:640px){
+    .entry{flex-direction:column}
+    .thumb{flex:none;width:100%}
+  }
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+</style>
+</head>
+<body>
+<div style="max-width:860px;margin:0 auto;padding:22px 22px 0;font-size:13px;letter-spacing:3px;"><a href="index.html" style="color:#9a917f;text-decoration:none;">&larr; IBID</a></div>
+<div class="wrap">
+  <header>
+    <div class="kicker">A nightly log</div>
+    <h1>BLOSSOM WORDS</h1>
+    <p class="sub">One good word a night, grown from the Blossom board.<br>The funny-looking ones are always load-bearing.</p>
+  </header>
+
+  <a class="entry" href="needfire-word.html">
+    <div class="thumb"><img src="needfire-surreal.jpg" alt="A ritual bonfire on a night moor, its smoke resolving into a ghost-herd of cattle"></div>
+    <div class="meta">
+      <div class="date">October 12, 2026</div>
+      <div class="word">NEEDFIRE</div>
+      <div class="phon">/ˈniːdˌfaɪər/ · NEED-fire · noun</div>
+      <p class="line">Old English <i>nīedfȳr</i> — a ritual fire kindled by friction in a time of calamity, lit to protect the herd from plague while every other hearth in the district stood cold.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="mneme-word.html">
+    <div class="thumb"><img src="mneme-surreal.jpg" alt="Mneme walking a midnight library where the books are blank but their shadows are full of writing"></div>
+    <div class="meta">
+      <div class="date">October 11, 2026</div>
+      <div class="word">MNEME</div>
+      <div class="phon">/ˈniːmiː/ · NEE-mee · noun</div>
+      <p class="line">The personification of memory — one of the three elder Muses, before the famous nine. She survives by hiding inside other words: <i>mnemonic</i>, <i>amnesia</i>, <i>anamnesis</i>.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <footer>
+    updated nightly, after the dreaming is done
+  </footer>
+</div>
+</body>
+</html>
