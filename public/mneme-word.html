@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MNEME — The Muse of Memory</title>
+<style>
+  :root{
+    --ink:#100d18;
+    --ink2:#171223;
+    --parchment:#d8c9a8;
+    --parchment-dim:#9c8f74;
+    --gold:#c9a24d;
+    --moth:#b9c4d6;
+    --fog:#8f8a9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #221a38 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:10px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(201,162,77,.35);
+    font-weight:400;
+  }
+  .moths{margin:26px auto 8px;width:260px;height:46px;position:relative;overflow:hidden}
+  .moths i{
+    position:absolute;width:14px;height:10px;border-radius:60% 60% 50% 50%;
+    background:radial-gradient(ellipse at center,#e8e2d2 0%,#b9c4d6 60%,transparent 75%);
+    opacity:.8;animation:drift 7s ease-in-out infinite;
+  }
+  .moths i:nth-child(1){left:20px;top:8px;animation-delay:0s}
+  .moths i:nth-child(2){left:90px;top:20px;animation-delay:1.4s;transform:scale(.7)}
+  .moths i:nth-child(3){left:160px;top:6px;animation-delay:2.8s;transform:scale(1.2)}
+  .moths i:nth-child(4){left:220px;top:22px;animation-delay:4.2s;transform:scale(.55)}
+  @keyframes drift{
+    0%,100%{translate:0 0;opacity:.25}
+    50%{translate:10px -12px;opacity:.9}
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #33294a;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #33294a;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#120e1c;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1d1530}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #33294a;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#120e1c;
+  }
+  .mcard h3{color:var(--moth);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#120e1c;border:1px solid #33294a;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--moth);border-color:var(--moth);color:#1a1626}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--moth);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .quote{
+    border-left:3px solid var(--moth);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#120e1c;border:1px solid #33294a;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0d0a14;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #33294a}
+  .seedcap{font-size:13px;color:var(--fog);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">MNEME</h1>
+    <div class="moths" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="phonetic">/ˈniːmiː/ &nbsp;·&nbsp; NEE-mee &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="mneme-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Mneme</strong> — the personification of memory; one of the three elder Muses.</p>
+    <p class="plain">Before the famous nine Muses, the Greeks had three: <b>Melete</b> (practice), <b>Mneme</b> (memory), and <b>Aoide</b> (song). Mneme is memory itself, given a name and a seat among the goddesses — because the Greeks understood that every art begins with remembering. You will almost never meet her standing alone in English. She survives the way old gods do: <b>hiding inside other words</b>.</p>
+    <p class="hint">From Greek μνήμη (mnēmē), "memory, remembrance." Say NEE-mee — the initial m is silent, the way it is in mnemonic.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>One root, three famous disguises — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">a- + mneme</div>
+        <div class="gloss"><b>Amnesia</b> — "without memory." The a- prefix negates, the mneme root names what's lost. The condition is literally named "no-Mneme."</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">mnemonic</div>
+        <div class="gloss">From Greek <i>mnēmonikos</i>, "of memory." A mnemonic is a device <i>for</i> Mneme — a rhyme, image, or palace built to give the Muse of memory something to hold onto.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">ana- + mneme</div>
+        <div class="gloss"><b>Anamnesis</b> — "a calling back to mind." Plato's doctrine that learning is <i>recollection</i>: the soul remembering what it knew before birth. Doctors still use it for the patient's history — the story you remember back into the room.</div>
+      </div>
+    </div>
+    <p class="hint">One root, three words you already knew. You were saying her name all along.</p>
+  </section>
+
+  <section class="card">
+    <h2>Three Words, One Root</h2>
+    <p>Mneme herself barely appears in English — but her children are everywhere:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>Mnemonic</h3>
+        <p>The helper. Memory aids, from "ROY G. BIV" to the method of loci — the ancient art of placing memories inside an imagined building so Mneme can walk through and find them.</p>
+      </div>
+      <div class="mcard">
+        <h3>Amnesia</h3>
+        <p>The absence. Named in the 1700s from Greek <i>amnēsia</i>, "forgetfulness" — the clinical word for what happens when Mneme leaves the room.</p>
+      </div>
+      <div class="mcard">
+        <h3>Anamnesis</h3>
+        <p>The return. Plato's <i>Meno</i> argues all learning is recollection; physicians took the word for the case history — the past, remembered back into the present.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Muse Through the Eras</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Old Greece</button>
+      <button class="tl-btn" data-era="1">The art of memory</button>
+      <button class="tl-btn" data-era="2">Medicine</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Old Greece</span> — Three Muses, not nine</h3>
+      <p>Before Hesiod's famous nine, Boeotian tradition honored three elder Muses: Melete (practice), Mneme (memory), Aoide (song). Memory comes before song — you cannot sing what you cannot remember. Mneme is the precondition of every art.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The art of memory</span> — Palaces for Mneme</h3>
+      <p>Greek and Roman orators built <i>memory palaces</i> — imagined buildings where each room held an idea. The technique is literally architecture for Mneme: give memory a place to live and she will keep your thoughts there.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Medicine</span> — Naming the absence</h3>
+      <p>When physicians needed a word for lost memory, they reached back to the Muse: <i>amnesia</i>, "without Mneme." The goddess's name became the diagnosis for her departure.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — The root that outlived the goddess</h3>
+      <p>Almost nobody says "mneme" aloud anymore — but millions say <i>mnemonic</i> and <i>amnesia</i> every day. The Muse dissolved into the language, the way she always said memory would: not kept in one place, but scattered everywhere, waiting to be recollected.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Word That Only Exists Inside Other Words</h2>
+    <p>Here's the quiet joke of tonight's board: <i>mneme</i> is a real English word, sitting right there in your list between <i>mestome</i> and <i>mnemon</i> — and yet it does almost no work on its own. Open any dictionary and the entry is short. The word's whole career is as a <b>root</b>: it lives inside <i>mnemonic</i>, <i>amnesia</i>, <i>anamnesis</i>, doing the meaning while other syllables take the credit.</p>
+    <div class="quote">
+      "Memory is the mother of the Muses."
+      <cite>— Aeschylus, <i>Prometheus Bound</i> (the Greeks put Mnemosyne, Memory, as the Muses' mother for a reason)</cite>
+    </div>
+    <p class="hint">Some words are the foundation with the house built on top. You found one tonight.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. Mneme was…</p>
+      <button class="opt">One of the three elder Muses — the personification of memory</button>
+      <button class="opt">A Greek goddess of the harvest</button>
+      <button class="opt">The inventor of the alphabet</button>
+      <button class="opt">A type of ancient Greek poetry</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>2. "Amnesia" breaks down as…</p>
+      <button class="opt">a- (toward) + mnesia (the mind)</button>
+      <button class="opt">am- (together) + nesia (islands)</button>
+      <button class="opt">a- (without) + the mneme root (memory) — literally "no-memory"</button>
+      <button class="opt">amne- (river) + sia (flow)</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>3. In Plato's use, "anamnesis" means…</p>
+      <button class="opt">Forgetting on purpose</button>
+      <button class="opt">Recollection — the idea that learning is remembering what the soul already knew</button>
+      <button class="opt">A memory palace with many rooms</button>
+      <button class="opt">The loss of childhood memories</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="mneme-surreal.jpg" alt="Mneme, the Muse of memory, walking a midnight library where the books are blank but their shadows are full of writing">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Widescreen surreal painting: a colossal neoclassical library at midnight, marble columns and towering shelves of ancient books rising into darkness, a serene robed woman — Mneme, the Muse of memory — walking the central aisle, her gown dissolving into pale moths behind her; one quiet impossibility — every book on the shelves is blank with empty pages, but each book's shadow cast across the marble floor is dense with illegible handwritten script, as if the shadows remember what the pages forgot. Painterly, deep blue and candle-gold palette, cinematic lighting, no readable text.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · mneme, hiding between mestome and mnemon<br>
+    the funny-looking ones are always load-bearing
+  </footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('mneme');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — Mneme is memory personified, one of the three elder Muses with Melete and Aoide.",
+     "Not quite — Mneme is the Muse of memory, one of the three elder Muses."],
+    ["Correct — a- (without) + mneme (memory): the condition is literally \u201cno-Mneme.\u201d",
+     "Not quite — amnesia is a- (without) + the mneme root: \u201cno-memory.\u201d"],
+    ["Correct — Plato's doctrine in the Meno: all learning is recollection.",
+     "Not quite — anamnesis is Plato's \u201crecollection\u201d: learning as remembering."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — Mneme herself would remember this one." :
+          score === 2 ? "2 / 3 — most of it recollected. Plato approves." :
+          "0\u20131 / 3 — a touch of amnesia. Scroll up and recollect.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>

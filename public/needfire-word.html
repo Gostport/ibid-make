@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEEDFIRE — The Fire Kindled in Distress</title>
+<style>
+  :root{
+    --ink:#141010;
+    --ink2:#1d1412;
+    --parchment:#d8c9a8;
+    --parchment-dim:#9c8f74;
+    --ember:#e07b39;
+    --gold:#c9a24d;
+    --ash:#8f8a9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #2b1a12 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(46px,11vw,96px);
+    letter-spacing:8px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(224,123,57,.4);
+    font-weight:400;
+  }
+  .sparks{margin:26px auto 8px;width:260px;height:52px;position:relative;overflow:hidden}
+  .sparks i{
+    position:absolute;bottom:0;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,#ffd9a0 0%,var(--ember) 55%,transparent 75%);
+    opacity:0;animation:rise 4.5s ease-in infinite;
+  }
+  .sparks i:nth-child(1){left:30px;animation-delay:0s}
+  .sparks i:nth-child(2){left:80px;animation-delay:1.1s;transform:scale(1.4)}
+  .sparks i:nth-child(3){left:130px;animation-delay:2.2s}
+  .sparks i:nth-child(4){left:180px;animation-delay:.6s;transform:scale(.7)}
+  .sparks i:nth-child(5){left:220px;animation-delay:3s;transform:scale(1.2)}
+  @keyframes rise{
+    0%{translate:0 0;opacity:0}
+    15%{opacity:.95}
+    100%{translate:14px -52px;opacity:0}
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--ember);
+    color:var(--ember);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--ember);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #3a2a22;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--ember),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--ember);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--ember);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a2a22;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#150f0d;
+  }
+  .part:hover{border-color:var(--ember)}
+  .part.active{border-color:var(--ember);background:#241612}
+  .part .frag{font-size:26px;color:var(--ember);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #3a2a22;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#150f0d;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#150f0d;border:1px solid #3a2a22;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--ember);border-color:var(--ember);color:#1a1210}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--ember);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--ember);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#150f0d;border:1px solid #3a2a22;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--ember)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--ember);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0d0a08;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #3a2a22}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--ember);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">NEEDFIRE</h1>
+    <div class="sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="phonetic">/ˈniːdˌfaɪər/ &nbsp;·&nbsp; NEED-fire &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="needfire-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Needfire</strong> — a ritual fire kindled by friction in a time of calamity, lit to protect livestock from plague — while every other hearth in the district stood cold.</p>
+    <p class="plain">English has a thousand words for ordinary fire. <b>Needfire is the one reserved for the worst night of the year.</b> When murrain — cattle plague — threatened the herd, the village put out every flame it owned and kindled one new fire by rubbing wood on wood, coaxing it instead of striking it. Then the cattle were driven through the smoke, to take the protection into their lungs and hides. You don't light a needfire for tea. You light it because things are dire.</p>
+    <p class="hint">From Old English <i>nīedfȳr</i> — "need-fire." Say NEED-fire, exactly as it looks. The funny-looking ones are always load-bearing.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Two Old English roots, and the plague they were lit against — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">nīed</div>
+        <div class="gloss"><b>Need</b> — but not "want." Old English <i>nīed</i> meant distress, compulsion, dire necessity. The fire's name is a weather report: things are bad.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">fȳr</div>
+        <div class="gloss"><b>Fire</b> — straightforward, except this fire was anything but ordinary. A <i>wild</i> fire: kindled by friction, belonging to no hearth, carrying no borrowed spark.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">murrain</div>
+        <div class="gloss"><b>The reason for the fire.</b> From Old French <i>morine</i>, "pestilence" — specifically cattle plague. The needfire was veterinary magic: smoke as medicine.</div>
+      </div>
+    </div>
+    <p class="hint">Two roots and a plague. The whole ritual is right there in the compound.</p>
+  </section>
+
+  <section class="card">
+    <h2>The Ritual in Three Acts</h2>
+    <p>Every needfire, everywhere it was ever lit, followed the same script:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Extinguishing</h3>
+        <p>First, darkness. Every hearth, forge, and candle in the district was put out. No borrowed flame, no carried embers — the needfire had to be wild-born, or it had no power.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Friction</h3>
+        <p>Then the rubbing: wood on wood — sometimes a rope wound round a wooden axle, turned by many hands until the axle smoldered. No flint, no steel. The fire had to be coaxed, not struck.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Driving</h3>
+        <p>Then the herd: cattle driven through the smoke, or between two needfires, to breathe the protection in. The ghost-herd in tonight's painting walks the road they walked.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Three Thousand Years of One Fire</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Deep Germanic past</button>
+      <button class="tl-btn" data-era="1">The church objects</button>
+      <button class="tl-btn" data-era="2">The Highlands</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Deep Germanic past</span> — The wild fire</h3>
+      <p>Jacob Grimm traced the <i>Notfeuer</i> — the German cousin of the needfire — back to heathen ritual: a fire kindled by friction and credited with power against plague and witchcraft <i>precisely because</i> no tame spark had touched it. Wildness was the active ingredient.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The church objects</span> — Banned, repeatedly</h3>
+      <p>Medieval penitentials condemned the needfire by name — which is proof it was still being lit. A ritual the church has to ban, century after century, is a ritual that's working, as far as the village is concerned.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Highlands</span> — Into the 1800s</h3>
+      <p>Scottish newspapers reported needfires kindled against cattle plague as late as the early 1800s — the last embers of a rite thousands of years old, lit within living memory of the modern world.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — The word outlives the rite</h3>
+      <p>The ritual is gone; the word remains, filed in dictionaries most people never open. Modern Beltane revivals sometimes rekindle it — friction, darkness, and all. Some fires refuse to go out.</p>
+    </div>
+    <div class="rule">
+      Every hearth in the district had to go dark first. The new fire belonged to no household — that was the point.
+      <cite>— the first rule of the needfire, everywhere it was lit</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A needfire was kindled…</p>
+      <button class="opt">With flint and steel, like any sensible fire</button>
+      <button class="opt">By friction — rubbing wood until it smoldered — in times of calamity</button>
+      <button class="opt">By carrying flame from the church altar</button>
+      <button class="opt">Only during lightning storms</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>2. Before it could be lit, custom demanded…</p>
+      <button class="opt">The village elders fast for three days</button>
+      <button class="opt">It be lit at exactly noon</button>
+      <button class="opt">Every other fire and hearth in the district be extinguished</button>
+      <button class="opt">A priest bless the wood</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. The "need" in needfire means…</p>
+      <button class="opt">Distress, compulsion — a fire kindled because things were dire</button>
+      <button class="opt">It was needed for cooking the feast</button>
+      <button class="opt">A village named Need, where the rite began</button>
+      <button class="opt">The need for light on moonless nights</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="needfire-surreal.jpg" alt="A ritual bonfire blazing on a night moor, ringed by cold extinguished hearths, its smoke resolving into a ghost-herd of cattle walking the sky">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Widescreen surreal painting: a lone ritual bonfire blazing on a dark windswept moor at night, ringed by cold extinguished stone hearths with no flame and no smoke; one quiet impossibility — the smoke rising from the bonfire thickens as it climbs and resolves into the shapes of cattle, a silent ghost-herd walking across the starry sky above the fire. Painterly, deep indigo and ember-orange palette, cinematic lighting, drifting sparks, distant dark hills, no readable text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · needfire, hiding between inferrer and neif<br>
+    the funny-looking ones are always load-bearing
+  </footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('needfire');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — wood on wood, coaxed not struck, and only when calamity demanded it.",
+     "Not quite — the whole point was friction: no flint, no steel, no borrowed flame."],
+    ["Correct — every hearth in the district went dark first. The new fire belonged to no household.",
+     "Not quite — all other fires had to be extinguished first. That was the first rule."],
+    ["Correct — Old English nīed: distress, compulsion. The name is a weather report.",
+     "Not quite — nīed meant dire necessity, not mild wanting."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — the herd is safe. The old ones would approve." :
+          score === 2 ? "2 / 3 — most of the rite remembered." :
+          "0\u20131 / 3 — the fire went out. Scroll up and rekindle it.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
