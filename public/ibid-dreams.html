@@ -9,6 +9,9 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:#070714; color:var(--ink); font-family:Georgia,'Times New Roman',serif; min-height:100vh; overflow-x:hidden; }
   #stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .backnav { max-width:1060px; margin:0 auto; padding:22px 22px 0; font-size:13px; letter-spacing:3px; position:relative; z-index:1; }
+  .backnav a { color:var(--ink-dim); text-decoration:none; }
+  .backnav a:hover { color:var(--violet); }
   .wrap { position:relative; z-index:1; max-width:1060px; margin:0 auto; padding:48px 22px 80px; }
   header { text-align:center; margin-bottom:10px; }
   .moon { font-size:44px; display:block; margin-bottom:8px; filter:drop-shadow(0 0 18px rgba(139,92,246,.8)); }
@@ -50,6 +53,7 @@
 </head>
 <body>
 <canvas id="stars"></canvas>
+<div class="backnav"><a href="index.html">&larr; IBID</a></div>
 <div class="wrap">
   <header>
     <span class="moon">&#127769;</span>
