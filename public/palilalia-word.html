@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALILALIA — The Word That Repeats Itself</title>
+<style>
+  :root{
+    --ink:#100d18;
+    --ink2:#171223;
+    --parchment:#d8c9a8;
+    --parchment-dim:#9c8f74;
+    --echo:#9d7bff;
+    --gold:#c9a24d;
+    --ash:#8f8a9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #221a38 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(46px,11vw,96px);
+    letter-spacing:8px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(157,123,255,.45);
+    font-weight:400;
+  }
+  .echoes{margin:26px auto 8px;width:280px;height:52px;position:relative;overflow:hidden}
+  .echoes i{
+    position:absolute;top:20px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;
+    border:2px solid var(--echo);
+    opacity:0;animation:echo 3.6s ease-out infinite;
+  }
+  .echoes i:nth-child(1){animation-delay:0s}
+  .echoes i:nth-child(2){animation-delay:1.2s}
+  .echoes i:nth-child(3){animation-delay:2.4s}
+  @keyframes echo{
+    0%{transform:scale(.4);opacity:.95}
+    100%{transform:scale(7);opacity:0}
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--echo);
+    color:var(--echo);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--echo);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #33294a;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--echo),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--echo);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--echo);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #33294a;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#120e1d;
+  }
+  .part:hover{border-color:var(--echo)}
+  .part.active{border-color:var(--echo);background:#1e1633}
+  .part .frag{font-size:26px;color:var(--echo);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #33294a;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#120e1d;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#120e1d;border:1px solid #33294a;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--echo);border-color:var(--echo);color:#14101f}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--echo);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--echo);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#120e1d;border:1px solid #33294a;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--echo)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--echo);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0d0a14;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #33294a}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--echo);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">PALILALIA</h1>
+    <div class="echoes" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="phonetic">/ˌpælɪˈleɪliə/ &nbsp;·&nbsp; pal-ih-LAY-lee-uh &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="palilalia-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Palilalia</strong> — the involuntary repetition of one's <i>own</i> syllables, words, or phrases — speech that echoes itself, usually faster and quieter each time, like a voice walking away down a corridor.</p>
+    <p class="plain">Say it out loud: <b>pal-ih-LAY-lee-uh</b>. Notice the little stutter built into the word itself — <i>la-li</i>, <i>la-li</i>. The Greeks named the condition after its sound, the way <i>borborygmus</i> rumbles. Say palilalia twice in a row and you have, very briefly, demonstrated the symptom.</p>
+    <p class="hint">From Greek <i>palin</i> ("again") + <i>lalia</i> ("speech, babble"). The funny-looking ones are always load-bearing.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Two Greek roots and the cousin it gets confused with — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">palin</div>
+        <div class="gloss"><b>"Again."</b> — Greek <i>palin</i>, as in <i>palindrome</i> (runs again the same way) and <i>palimpsest</i> (scraped again for reuse). The repeater's half of the word.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">lalia</div>
+        <div class="gloss"><b>"Speech, babble."</b> — Greek <i>lalia</i>, the chatter half. It turns up in <i>echolalia</i> (repeating others), <i>glossolalia</i> (speaking in tongues), and <i>lalophobia</i> (fear of speaking — the cruel opposite).</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">echo&shy;lalia</div>
+        <div class="gloss"><b>The cousin.</b> Echolalia repeats <i>other people's</i> speech; palilalia repeats <i>your own</i>. One is a parrot, the other is an echo chamber. Clinicians keep them strictly apart.</div>
+      </div>
+    </div>
+    <p class="hint">Palin says <i>again</i>; lalia says <i>chatter</i>. Together they say it twice.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Sounds Like</h2>
+    <p>Three things clinicians listen for:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Repeat</h3>
+        <p>A word or phrase comes back uninvited — "going home, going home, going home" — sometimes dozens of times. It isn't stuttering: stuttering trips on the <i>start</i> of speech; palilalia replays the whole tape.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Fade</h3>
+        <p>Each repetition tends to come faster and quieter than the last, trailing off like an echo down a hallway. In tonight's painting, the ghost-ribbons arrive <i>before</i> the words are spoken.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Company</h3>
+        <p>Palilalia keeps clinical company: Tourette syndrome, Parkinson's, autism, aphasia after stroke. First described in 1908 by Souques, in Parkinson's patients — the word is barely a century old.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Hundred Years of the Echo</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">1908</button>
+      <button class="tl-btn" data-era="1">Mid-century</button>
+      <button class="tl-btn" data-era="2">The distinction</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">1908</span> — Souques names it</h3>
+      <p>French neurologist Alexandre Souques coins <i>palilalie</i> after observing Parkinson's patients involuntarily repeating their own words. A brand-new word for an old human glitch.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Mid-century</span> — The company gathers</h3>
+      <p>Clinicians begin documenting palilalia across Tourette syndrome, autism, and post-stroke aphasia — the same echo, arriving through different doors of the brain.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The distinction</span> — Not the parrot</h3>
+      <p>Speech pathology draws the hard line: <i>echolalia</i> repeats others, <i>palilalia</i> repeats the self. One borrows a voice; the other can't put its own down.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — The word outruns the clinic</h3>
+      <p>Palilalia escapes into poetry and linguistics as a metaphor for anything that can't stop restating itself — arguments, earworms, group chats. The clinic coined it; the culture adopted it.</p>
+    </div>
+    <div class="rule">
+      Say palilalia twice in a row and you have, very briefly, demonstrated the symptom.
+      <cite>— the cheapest diagnostic in neurology, offered free with this page</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. Palilalia is the involuntary repetition of…</p>
+      <button class="opt">Other people's speech, parrot-fashion</button>
+      <button class="opt">One's <i>own</i> syllables, words, or phrases</button>
+      <button class="opt">Song lyrics stuck in your head</button>
+      <button class="opt">The same joke at every family dinner</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The "palin" in palilalia means…</p>
+      <button class="opt">"Again" — as in palindrome</button>
+      <button class="opt">"Pale," describing the fading volume</button>
+      <button class="opt">"Friend," from an old clinical euphemism</button>
+      <button class="opt">"Swift," for the accelerating repeats</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>3. The term was first coined…</p>
+      <button class="opt">By the ancient Greeks, who had a word for everything</button>
+      <button class="opt">In a 1960s linguistics textbook</button>
+      <button class="opt">In 1908, by Souques, describing Parkinson's patients</button>
+      <button class="opt">On a Blossom board in October 2026</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="palilalia-surreal.jpg" alt="A hooded figure on a cracked salt flat at dusk, words rising as ribbons of text, with ghost-ribbons of echoes streaming in from the horizon before the words are spoken">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal painterly scene at dusk: a lone hooded figure stands on a vast cracked salt flat, caught mid-speech, their spoken words rising as visible ribbons of dark text curling into a violet-orange sky; one quiet impossibility — the echoes arrive BEFORE the words leave the mouth, pale ghost-ribbons of text streaming in from the distant horizon and flowing backward into the speaker's open mouth. Melancholic, dreamlike, cinematic lighting, rich texture, no readable text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · palilalia, hiding between palila and pall<br>
+    the funny-looking ones are always load-bearing
+  </footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('palilalia');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — your <i>own</i> words. Repeating others is echolalia, the parrot; this is the echo chamber.",
+     "Not quite — that's echolalia. Palilalia replays <i>your own</i> tape."],
+    ["Correct — <i>palin</i>, again, as in palindrome.",
+     "Not quite — <i>palin</i> is Greek for 'again.'"],
+    ["Correct — Souques, 1908, Parkinson's patients. Barely a century old.",
+     "Not quite — 1908, Souques, Parkinson's patients. (The Blossom board merely rediscovered it.)"]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — again, again: flawless. Flawless." :
+          score === 2 ? "2 / 3 — most of the echo caught." :
+          "0\u20131 / 3 — the words got away. Scroll up and repeat after me.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
