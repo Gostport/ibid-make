@@ -1,4 +1,11 @@
 name: Deploy to Firebase Hosting
+# v1.1 — Replaced deprecated `--token` auth with a service account key.
+# CHANGELOG:
+#   v1.1 — auth via google-github-actions/auth + FIREBASE_SERVICE_ACCOUNT secret
+#          (GOOGLE_APPLICATION_CREDENTIALS); dropped `--token` (deprecated,
+#          slated for removal in a future firebase-tools major version).
+#          Deploy target made explicit: --only hosting:ibid-make.
+#   v1.0 — initial deploy workflow (firebase login:ci token in FIREBASE_TOKEN).
 
 on:
   push:
@@ -14,4 +21,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install -g firebase-tools
-      - run: firebase deploy --only hosting --project gen-lang-client-0205104288 --token "${{ secrets.FIREBASE_TOKEN }}"
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      - run: firebase deploy --only hosting:ibid-make --project gen-lang-client-0205104288
