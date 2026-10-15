@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TANGANTANGAN — The Plant With Hands For Leaves</title>
+<style>
+  :root{
+    --ink:#101711;
+    --ink2:#17231a;
+    --parchment:#e6ddc3;
+    --parchment-dim:#a8a07e;
+    --leaf:#7fb069;
+    --gold:#c9a24d;
+    --ash:#8f9a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #24382a 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(127,176,105,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--leaf);
+    color:var(--leaf);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--leaf);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2e4433;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--leaf),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--leaf);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--leaf);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2e4433;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#121d14;
+  }
+  .part:hover{border-color:var(--leaf)}
+  .part.active{border-color:var(--leaf);background:#1e2f22}
+  .part .frag{font-size:26px;color:var(--leaf);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #2e4433;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#121d14;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#121d14;border:1px solid #2e4433;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--leaf);border-color:var(--leaf);color:#141f16}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--leaf);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--leaf);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#121d14;border:1px solid #2e4433;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--leaf)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--leaf);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0d130e;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #2e4433}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--leaf);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">TANGANTANGAN</h1>
+    <div class="phonetic">/tahng-ahn-tahng-ahn/ &nbsp;·&nbsp; tahng-ahn-tahng-ahn &nbsp;·&nbsp; noun · Tagalog</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="tangantangan-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Tangantangan</strong> — the castor oil plant, <i>Ricinus communis</i> — a tall shrub with big palmate leaves shaped like open hands and spiky seed pods. Its seeds yield castor oil, and the same seeds carry ricin, one of the most potent plant poisons known.</p>
+    <p class="plain">Say it out loud: <b>tahng-ahn-tahng-ahn</b>. The doubling is the meaning. Tagalog repeats the root to say <i>many</i> or <i>like</i> — hands, hands, hands, because every leaf is a hand. One word, one plant, one quiet warning: medicine and poison in the same pod.</p>
+    <p class="hint">From Tagalog <i>tangan</i> ("hand") + reduplication. The funny-looking ones are always load-bearing.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>One root, one doubling, one Latin rename — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">tangan</div>
+        <div class="gloss"><b>"Hand."</b> — Tagalog <i>tangan</i>. The leaf is palmate, 5 to 11 lobes spreading from a center point, exactly like fingers from a palm. The plant is named for its leaves.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-tangan</div>
+        <div class="gloss"><b>The repeat.</b> — Reduplication in Tagalog can mean plurality, resemblance, or doing something over and over. Tangan-tangan is not one hand, it is <i>hand after hand after hand</i> — a whole shrub of them.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">Ricinus</div>
+        <div class="gloss"><b>The Latin rename.</b> — Linnaeus called it <i>Ricinus</i>, Latin for "tick," because the mottled seed looks like a tick. Same plant, second metaphor: Tagalog saw hands, Latin saw ticks.</div>
+      </div>
+    </div>
+    <p class="hint">Hands in Manila, ticks in Uppsala. The seed does both jobs — it looks like a tick, it grows on a hand-leaf.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>Three facts that have to be held together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Hand Leaves</h3>
+        <p>Big, star-shaped, palmately lobed leaves on long stalks, green to deep red-purple. The silhouette alone identifies it — no other common garden shrub wears quite that hand.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Oil and the Poison</h3>
+        <p>Pressed seeds give castor oil — laxative, lubricant, old household staple. The seed coat holds ricin. The oil is safe only because processing removes it. Never chew the seeds; a few can kill.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Many Names</h3>
+        <p>Castor bean, castor oil plant, Palma Christi ("palm of Christ") for its reputed healing, wonder tree, lansina in Tagalog too. Every name picks a different half — healer or hazard.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Long History of Hands</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Ancient</button>
+      <button class="tl-btn" data-era="1">1753</button>
+      <button class="tl-btn" data-era="2">Household</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Ancient</span> — Oil before history</h3>
+      <p>Castor seeds turn up in Egyptian tombs; the oil lit lamps and dressed skin thousands of years before anyone wrote the word down. The plant traveled with people because it was useful.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1753</span> — Linnaeus renames it</h3>
+      <p>Carl Linnaeus gives it <i>Ricinus communis</i> in Species Plantarum — tick, common. Science files it under the seed. Tagalog keeps it under the leaf.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Household</span> — The spoonful</h3>
+      <p>Castor oil becomes the 19th- and early-20th-century household cure-all — the dreaded spoonful, the machine lubricant, the "Palma Christi" in the medicine cabinet. Useful, unpleasant, respected.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Ornamental, watched</h3>
+      <p>Now it is mostly ornamental and industrial — biodiesel, lubricants, cosmetics — and a teaching plant for the medicine-poison line. Gardens grow it for the leaves; chemists watch it for the seeds.</p>
+    </div>
+    <div class="rule">
+      Medicine and poison in the same pod — the dose, and the processing, is the difference.
+      <cite>— the oldest rule in pharmacology, wearing a hand-leaf</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. Tangantangan is…</p>
+      <button class="opt">The castor oil plant, <i>Ricinus communis</i></button>
+      <button class="opt">A Tagalog snack food</button>
+      <button class="opt">A kind of palm tree</button>
+      <button class="opt">A Philippine festival dance</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>2. The reduplication in tangan-tangan signals…</p>
+      <button class="opt">That the plant is very tall</button>
+      <button class="opt">That it grows only in pairs</button>
+      <button class="opt">Many / like — hand after hand, leaf after leaf</button>
+      <button class="opt">That it is poisonous</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>3. The poison in the seeds is…</p>
+      <button class="opt">Cyanide</button>
+      <button class="opt">Ricin — in the seed coat, removed when the oil is processed</button>
+      <button class="opt">Nicotine</button>
+      <button class="opt">There is no poison, the seeds are safe to eat</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="tangantangan-surreal.jpg" alt="A tall castor oil plant with palmate hand-like leaves and spiky red seed pods on a garden path at dusk, its leaves casting hand-shaped shadows on the path">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal painterly scene at dusk: a tall castor oil plant, tangan-tangan, Ricinus communis, with large palmate leaves like open hands and spiky red-green seed pods, growing beside a quiet Philippine garden path at golden dusk; one quiet impossibility — the plant's palmate leaves cast shadows on the path shaped like human hands gently waving, while the plant itself stands still. Lush, dreamlike, cinematic lighting, rich botanical texture, no readable text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · tangantangan, hiding between hands<br>
+    the funny-looking ones are always load-bearing
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('tangantangan');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — castor oil plant, Ricinus communis. The snack claim floating around online is a bad dictionary entry.",
+     "Not quite — tangantangan is the castor oil plant."],
+    ["Correct — reduplication: hand after hand, leaf after leaf.",
+     "Not quite — the repeat means many / like."],
+    ["Correct — ricin, in the seed coat. Processing removes it from the oil; the seeds themselves are not food.",
+     "Not quite — ricin. Never chew the seeds."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — hand after hand, perfect." :
+          score === 2 ? "2 / 3 — most of the hands caught." :
+          "0–1 / 3 — the leaves got away. Scroll up and count the hands.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
