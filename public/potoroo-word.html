@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POTOROO — A Word That Hops</title>
+<style>
+  :root{
+    --ink:#0c0e1a;
+    --ink2:#131728;
+    --parchment:#eadfc2;
+    --parchment-dim:#b3a67f;
+    --gold:#d8b25c;
+    --truffle:#7c5cbf;
+    --teal:#4fd8c8;
+    --fog:#8a90a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #1b2140 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:6px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(79,216,200,.25);
+    font-weight:400;
+  }
+  .paws{
+    display:flex;justify-content:center;gap:14px;margin:26px 0 8px;
+    font-size:26px;opacity:.9;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--teal);
+    color:var(--teal);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--teal);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #262c48;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--teal);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  /* anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2e3552;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#0f1222;
+  }
+  .part:hover{border-color:var(--teal)}
+  .part.active{border-color:var(--teal);background:#141a2e}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#0f1222;border:1px solid #2e3552;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--truffle);border-color:var(--truffle);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--truffle);font-style:italic}
+  .tl-panel p{color:#cfc4a8}
+  /* truffle chapter */
+  .quote{
+    border-left:3px solid var(--truffle);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#0f1222;border:1px solid #2e3552;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--teal)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#16211a}
+  .opt.wrong{border-color:var(--truffle);background:#1d1530}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#090b14;border:1px dashed #3d4468;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc4a8;font-style:italic;
+  }
+  .copy-btn{
+    margin-top:14px;background:var(--teal);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  .art-note{display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap}
+  .art-note img{width:120px;border-radius:8px;border:1px solid #2e3552}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">POTOROO</h1>
+    <div class="paws"><span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span></div>
+    <div class="phonetic">/ˌpɒtəˈruː/ &nbsp;·&nbsp; pot-uh-ROO &nbsp;·&nbsp; noun (plural potoroos)</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="potoroo-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition</h2>
+    <p class="def"><strong>Potoroo</strong> — a small, nocturnal, herbivorous marsupial of the genus <i>Potorous</i>, native to Australia; a rat-kangaroo about the size of a rabbit, with a pointed snout, big ears, and a hop far punchier than its size suggests.</p>
+    <p class="hint">Say it out loud. It sounds like what it is: something small bouncing past in the dark.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Animal</h2>
+    <p>Tap each part — the potoroo is built like a toolkit:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">the nose</div>
+        <div class="gloss">Long, pointed, and questing. The long-nosed potoroo sniffs out underground truffles it can neither see nor hear — a bloodhound in a two-pound body.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">the hind legs</div>
+        <div class="gloss">Massively overbuilt for the animal's size. <i>Potorous tridactylus</i> — "three-toed" — was named for hind feet that look engineered for launch.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">the tail</div>
+        <div class="gloss">Long, tapering, semi-prehensile. A counterbalance mid-hop and a fifth limb when the potoroo sits up to inspect the night.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">the pouch</div>
+        <div class="gloss">Forward-facing, like a kangaroo's — because when you move by hopping, a rear-facing pouch would jettison the baby at every bounce.</div>
+      </div>
+    </div>
+    <p class="hint">Word anatomy is simpler: it's one piece, borrowed whole — from Dharug <i>buduru</i>, the Sydney-area Aboriginal name for the animal. In English since about 1790.</p>
+  </section>
+
+  <section class="card">
+    <h2>A Marsupial in Four Acts</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">1790</button>
+      <button class="tl-btn" data-era="1">1800s</button>
+      <button class="tl-btn" data-era="2">1900s</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">1790</span> — The word hops into English</h3>
+      <p>Early colonists around Sydney hear the Dharug word <i>buduru</i> and write down "potoroo." It enters English dictionaries as the name of a small hopping animal nobody in London has ever seen — a word arriving before the understanding.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1800s</span> — The naturalists arrive</h3>
+      <p>European naturalists begin cataloguing Australia's marsupials and find the potoroo delightfully confusing: rat-like, kangaroo-ish, something in between. It gets filed with the macropods — the big-footed clan — where it remains, the family's smallest eccentric.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1900s</span> — The truffle connection</h3>
+      <p>Field biologists discover the potoroo's secret life: it is a mycophagist, a fungus-eater, digging up underground truffles by scent alone. The spores pass through unharmed and are planted, fertilized, across the forest floor. The potoroo isn't just living in the forest — it's gardening it.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Endangered and guarded</h3>
+      <p>The long-footed potoroo is endangered; foxes, cats, and habitat loss press in. Conservation groups like Aussie Ark breed and guard them. A word that hopped into English in 1790 now depends on humans to keep hopping at all.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Truffle Chapter</h2>
+    <p>Here is the thing that makes the potoroo more than a funny-looking word: it is an ecosystem engineer. The underground fungi it eats form mycorrhizal partnerships with eucalyptus roots — the trees literally cannot thrive without them. By eating truffles and scattering their spores, each potoroo tends an invisible orchard across hectares of night forest. Remove the potoroo, and the forest quietly starves.</p>
+    <div class="quote">
+      "The potoroo doesn't just live in the forest. It mails the forest to itself, one spore at a time."
+      <cite>— tonight's page, and it stands by it</cite>
+    </div>
+    <p class="hint">Funny-looking word on a phone screen; an entire forest's postal service underneath. That's the Blossom jackpot.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="2">
+      <p>1. A potoroo is…</p>
+      <button class="opt">A desert wildflower</button>
+      <button class="opt">An Aboriginal wind instrument</button>
+      <button class="opt">A small Australian marsupial, a rat-kangaroo</button>
+      <button class="opt">A type of nocturnal parrot</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The word comes from…</p>
+      <button class="opt">Dharug <i>buduru</i>, an Aboriginal Australian language</button>
+      <button class="opt">Greek, meaning "night-hopper"</button>
+      <button class="opt">19th-century slang for "pocket thief"</button>
+      <button class="opt">Latin, meaning "three-toed"</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>3. Potoroos are ecosystem engineers because they…</p>
+      <button class="opt">Pollinate waratah flowers</button>
+      <button class="opt">Spread truffle spores in their droppings, seeding the forest's fungal network</button>
+      <button class="opt">Build dams that reshape waterways</button>
+      <button class="opt">Herd wallabies away from crops</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <div class="seedbox" id="seedText">Surreal nocturnal dreamscape, painterly, no text. A giant long-nosed potoroo — a small Australian rat-kangaroo marsupial with a pointed snout, large dark eyes, big ears, long hind legs and a long tapering tail — frozen mid-hop above a moonlit red desert. Its fur is hyper-detailed; its enormous eyes reflect constellations. Below, the sand dunes are studded with giant unearthed truffles glowing teal and violet like lanterns, their spores spiraling upward as streams of stars into an indigo sky. The potoroo's long tail trails behind it, dissolving into a ribbon of galaxy. Tiny wallaby silhouettes hop along the distant horizon. One quiet impossibility: the craters of the huge low moon are shaped like potoroo footprints. Deep shadows, luminous bioluminescent color, dreamlike atmosphere, widescreen 16:9 composition.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+    <div class="art-note">
+      <img src="potoroo-surreal.jpg" alt="Surreal potoroo illustration">
+      <span class="hint">Grown from this very seed, tonight. 👆</span>
+    </div>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · buduru → potoroo<br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('Potoroo');
+      u.lang = 'en-AU'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — genus Potorous, the rat-kangaroo, roughly rabbit-sized.",
+     "Not quite — it's a small Australian marsupial, a rat-kangaroo."],
+    ["Correct — Dharug buduru, Sydney area, in English since about 1790. (The Latin 'three-toed' is tridactylus, the species name — a fine trap.)",
+     "Not quite — it's from Dharug buduru. The Latin 'three-toed' is tridactylus, the species epithet."],
+    ["Correct — mycorrhizal truffle spores, planted with fertilizer, across hectares of night forest.",
+     "Not quite — they spread truffle spores in their droppings, tending the forest's fungal network."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.textContent = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.textContent = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — you hop with the potoroos now." :
+          score === 2 ? "2 / 3 — respectable. The truffle-sniffer approves." :
+          "Back to the burrow — scroll up and try again.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
