@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUIGNOL — The Puppet That Ate Paris</title>
+<style>
+  :root{
+    --ink:#121013;
+    --ink2:#1b181e;
+    --parchment:#e8dcc0;
+    --parchment-dim:#b9a97f;
+    --gold:#c9a227;
+    --blood:#8e2f32;
+    --fog:#8a8494;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #2a1620 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:8px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(142,47,50,.45);
+    font-weight:400;
+  }
+  .marionette{margin:26px auto 8px;width:220px;position:relative;height:64px}
+  .marionette .bar{
+    height:5px;background:linear-gradient(var(--gold),#6e5614);border-radius:3px;
+  }
+  .marionette span{
+    position:absolute;top:5px;width:2px;background:linear-gradient(#8a8578,transparent);
+    border-radius:2px;animation:sway 2.6s ease-in-out infinite;
+  }
+  .marionette span:nth-child(2){left:18%;height:52px;animation-delay:0s}
+  .marionette span:nth-child(3){left:42%;height:38px;animation-delay:.5s}
+  .marionette span:nth-child(4){left:63%;height:58px;animation-delay:1s}
+  .marionette span:nth-child(5){left:84%;height:44px;animation-delay:1.5s}
+  @keyframes sway{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-4deg)}}
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c2833;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  /* etymology anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a3442;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#151218;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1e1a14}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#151218;border:1px solid #3a3442;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--blood);border-color:var(--blood);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--blood);font-style:italic}
+  .tl-panel p{color:#cfc4a8}
+  .quote{
+    border-left:3px solid var(--blood);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#151218;border:1px solid #3a3442;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#16211a}
+  .opt.wrong{border-color:var(--blood);background:#221416}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#0e0c10;border:1px dashed #4a4356;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc4a8;font-style:italic;
+  }
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">GUIGNOL</h1>
+    <div class="marionette" aria-hidden="true"><div class="bar"></div><span></span><span></span><span></span><span></span></div>
+    <div class="phonetic">/ɡiːnˈjɔːl/ &nbsp;·&nbsp; geen-YOL &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="guignol-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition</h2>
+    <p class="def"><strong>Guignol</strong> — the Lyonnaise puppet hero, a quick-witted silk weaver of the working class. <strong>Grand Guignol</strong> — the Paris theatre (1897–1962) famous for naturalistic horror; by extension, any gruesome, melodramatic horror entertainment.</p>
+    <p class="hint">A puppet's name became the word for an entire genre of staged gore. Show business has never been subtle.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Tap each fragment:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">guignol</div>
+        <div class="gloss">From <i>"C'est guignolant!"</i> — Lyon weavers' dialect for "It's funny!" The laugh gave the puppet his name: Guignol, the glove puppet in the brown wool coat with gold buttons, created by silk weaver Laurent Mourguet around 1808.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">grand + guignol</div>
+        <div class="gloss">French <i>grand</i>, "great" — the Théâtre du Grand-Guignol, "theatre of the great puppet," opened in Paris in 1897 in a former chapel. The puppet's name, scaled up to 293 seats of staged horror.</div>
+      </div>
+    </div>
+    <p class="hint">So: a weaver's joke → a puppet → a theatre → a whole genre of horror.</p>
+  </section>
+
+  <section class="card">
+    <h2>A Horror in Four Acts</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">c. 1808</button>
+      <button class="tl-btn" data-era="1">1897</button>
+      <button class="tl-btn" data-era="2">1914–1945</button>
+      <button class="tl-btn" data-era="3">1962 →</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">c. 1808</span> — The puppet is born</h3>
+      <p>Laurent Mourguet, a Lyon silk weaver turned tooth-puller turned puppeteer, creates Guignol — a working-class hero with a stick, a quick wit, and a sense of justice. He dresses him as a silk weaver, the pride of Lyon. The puppet is a hit; Polichinelle is retired.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1897</span> — The theatre opens</h3>
+      <p>Oscar Méténier founds the Théâtre du Grand-Guignol in Paris's Pigalle district — a former chapel with 293 seats, the smallest theatre in Paris, its boxes like confessionals and angels over the orchestra. Director Max Maurey steers it toward horror and judges a show's success by the number of patrons who faint: about two a night.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1914–1945</span> — The golden age of gore</h3>
+      <p>Between the wars, the Grand Guignol peaks — royalty and celebrities in evening dress come to watch eye-gougings, live burials, and acid attacks staged with pioneering special effects. André de Lorde, the "Prince of Terror," writes over a hundred plays, consulting a psychologist on the madness scenes. Doctors sit in the audience as a marketing ploy.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1962 →</span> — The afterlife</h3>
+      <p>The theatre closes — real postwar horror, management said, had outpaced the stage. But the name survives as an adjective: <i>grand-guignolesque</i>, for anything theatrically gruesome. Every splatter film since owes the puppet royalties.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Puppet That Ate Paris</h2>
+    <p>The Grand Guignol's genius was intimacy: 293 seats, a converted chapel, effects close enough to touch. The horror wasn't spectacle — it was <i>proximity</i>. Audiences fainted not because the gore was grand, but because it was near.</p>
+    <div class="quote">
+      "The theatre owed its name to Guignol, a traditional Lyonnaise puppet character, joining political commentary with the style of Punch and Judy."
+      <cite>— on the Théâtre du Grand-Guignol (1897–1962)</cite>
+    </div>
+    <p class="hint">Funny-looking word on a phone screen; bottomless well underneath. That's the Blossom jackpot.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. The Grand Guignol was…</p>
+      <button class="opt">A Paris theatre famous for naturalistic horror, 1897–1962</button>
+      <button class="opt">A French battlefield of WWI</button>
+      <button class="opt">A Lyon puppet who told jokes</button>
+      <button class="opt">A type of silk loom</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>2. Guignol the puppet was created by…</p>
+      <button class="opt">André de Lorde, the "Prince of Terror"</button>
+      <button class="opt">Max Maurey, a theatre director</button>
+      <button class="opt">Laurent Mourguet, a Lyon silk weaver, around 1808</button>
+      <button class="opt">Oscar Méténier, a Paris journalist</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>3. The puppet got his name from…</p>
+      <button class="opt">The French word for "gore"</button>
+      <button class="opt">The street where the theatre stood</button>
+      <button class="opt">Its founder's childhood nickname</button>
+      <button class="opt">The weavers' cry <i>"C'est guignolant!"</i> — "It's funny!"</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <div class="seedbox" id="seedText">Interior of the Théâtre du Grand-Guignol, Paris, 1925: live actors performing a naturalistic horror play on a small stage — a surgeon in a bloodied apron looming over a screaming patient in a Victorian operating-theatre set, the 293-seat former chapel with its confessionals-like boxes and carved angels over the orchestra, footlights glaring, audience in 1920s evening dress leaning forward, some covering their faces; one quiet impossibility — the carved chapel angels above the orchestra have their hands pressed over their eyes</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · guignolant → Guignol → <b>Grand Guignol</b><br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('guignol');
+      u.lang = 'fr-FR'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — 293 seats in a former chapel, two faintings a night.",
+     "Not quite — it was the Paris horror theatre, 1897\u20131962."],
+    ["Correct — Mourguet the silk weaver, Lyon, around 1808.",
+     "Not quite — Laurent Mourguet, a Lyon silk weaver, around 1808."],
+    ["Correct — <i>\u201cC\u2019est guignolant!\u201d</i> \u2014 \u201cIt\u2019s funny!\u201d",
+     "Not quite — from the weavers\u2019 cry <i>\u201cC\u2019est guignolant!\u201d</i>"]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — the puppet bows. No fainting." :
+          score === 2 ? "2 / 3 — the house applauds politely." :
+          "0\u20131 / 3 — back to the cheap seats. Scroll up.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
