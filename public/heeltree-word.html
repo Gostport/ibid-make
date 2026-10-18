@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEELTREE — The Beam at the Back of the Harrow</title>
+<style>
+  :root{
+    --ink:#171008;
+    --ink2:#20160c;
+    --soil:#d8b98a;
+    --soil-dim:#9c8256;
+    --gold:#d9a441;
+    --dusk:#7d8fc4;
+    --fog:#8f8574;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--soil);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #2a1f10 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:8px;color:var(--soil);
+    text-shadow:0 0 40px rgba(217,164,65,.35);
+    font-weight:400;
+  }
+  .furrows{margin:26px auto 8px;width:260px;height:46px;position:relative;overflow:hidden}
+  .furrows i{
+    position:absolute;left:0;right:0;height:6px;border-radius:3px;
+    background:linear-gradient(90deg,transparent,#6b4f2a 20%,#6b4f2a 80%,transparent);
+    opacity:.85;
+  }
+  .furrows i:nth-child(1){top:2px}
+  .furrows i:nth-child(2){top:16px;opacity:.6}
+  .furrows i:nth-child(3){top:30px;opacity:.4}
+  .phonetic{
+    font-style:italic;color:var(--soil-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #3a2c18;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--soil);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#d3c29c}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a2c18;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#1a1209;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#251a0d}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  /* machine parts */
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #3a2c18;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#1a1209;
+  }
+  .mcard h3{color:var(--dusk);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c9b88f}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#1a1209;border:1px solid #3a2c18;color:var(--soil-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--dusk);border-color:var(--dusk);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--soil);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--dusk);font-style:italic}
+  .tl-panel p{color:#d3c29c}
+  .quote{
+    border-left:3px solid var(--dusk);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#1a1209;border:1px solid #3a2c18;
+    color:var(--soil);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#141f12}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#120d06;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#d3c29c;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #3a2c18}
+  .seedcap{font-size:13px;color:var(--fog);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--soil-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">HEELTREE</h1>
+    <div class="furrows" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="phonetic">/ˈhiːltriː/ &nbsp;·&nbsp; HEEL-tree &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="heeltree-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Heeltree</strong> — the whiffletree of a harrow.</p>
+    <p class="plain">The dictionary assumes you know two farm words, so here they are. A <b>harrow</b> is a heavy frame studded with iron teeth, dragged over plowed land to smash clods and level the soil. A <b>whiffletree</b> is the pivoted wooden bar in horse-drawn harness that the traces hook to — it swings to balance the pull between animals. The <b>heeltree</b> is that same kind of draft bar, mounted at the <b>heel</b> — the trailing end — of the harrow, where the team's pull enters the implement. One beam, doing all the dragging.</p>
+    <p class="hint">Heel (the back end) + tree (a wooden beam). That's the whole word, and it's honest.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Two syllables, both doing visible work — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">heel</div>
+        <div class="gloss">The back or trailing end of a thing — the heel of a shoe, the heel of a ship's keel, the heel of a harrow. The bar sits at the rear of the implement, where the pull comes in from behind.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">tree</div>
+        <div class="gloss">Not the plant — a wooden beam, in the old draft-gear sense. Same "tree" as in axletree (the axle beam), whiffletree, singletree, and doubletree. A whole family of farm words built from one beam.</div>
+      </div>
+    </div>
+    <p class="hint">Once you know "tree" means "beam," half the harness vocabulary unlocks at once.</p>
+  </section>
+
+  <section class="card">
+    <h2>One Machine, Three Parts</h2>
+    <p>The definition names three things. Here's how they stack:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>The harrow</h3>
+        <p>The implement itself — a frame of iron teeth dragged across the field to break and level the soil after plowing. One of the oldest tillage tools there is.</p>
+      </div>
+      <div class="mcard">
+        <h3>The whiffletree</h3>
+        <p>The pivoted draft bar the horse team's traces attach to. It rocks back and forth to even out the pull — "whiffle" is to swing or waver. The shock absorber of horse farming.</p>
+      </div>
+      <div class="mcard">
+        <h3>The heeltree</h3>
+        <p>That draft bar, fitted to the harrow at its heel — the rear. The single point where animal muscle becomes dragged steel. The word exists because the bar needed a name on <i>this</i> machine.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Beam Through the Eras</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Long ago</button>
+      <button class="tl-btn" data-era="1">The draft-gear family</button>
+      <button class="tl-btn" data-era="2">Farm English</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Long ago</span> — Teeth dragged through dirt</h3>
+      <p>Harrows are ancient — branches and spiked frames dragged over broken ground to prepare seedbeds, long before anyone wrote the word down. The tool is older than the language describing it.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The draft-gear family</span> — Every bar gets a "tree"</h3>
+      <p>Horse-drawn farming built a vocabulary of beams: the <i>singletree</i> for one animal, the <i>doubletree</i> for two, the <i>whiffletree</i> that pivots between them. In every one, "tree" means a wooden bar — the same "tree" hiding in <i>axletree</i>.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Farm English</span> — The bar needs a name on this machine</h3>
+      <p>Put that draft bar on a harrow instead of a wagon and it needs its own word: the <i>heeltree</i>, the whiffletree of a harrow, named for its seat at the implement's heel. Working vocabulary, coined at the fence line, not the desk.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — A word with no job</h3>
+      <p>Tractors replaced the teams, and the heeltree went with them. The word survives in draft-horse circles, agricultural museums, and dictionaries — like the one on your screen tonight — waiting for a Blossom list to wake it up.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Why the Dictionary Failed You</h2>
+    <p>That definition is a perfect circle of jargon: it defines an unknown word with two more unknown words. <i>Heeltree</i> assumes you know <i>whiffletree</i>, which assumes you know <i>harrow</i> — three farm implements deep, and you were standing in none of those fields.</p>
+    <div class="quote">
+      "the whiffletree of a harrow"
+      <cite>— the whole dictionary entry, all seven words of it</cite>
+    </div>
+    <p class="hint">Some words are locked rooms, and the definition is just another locked room inside. Tonight you got the key: it's a beam at the back of a farm tool.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. A heeltree is…</p>
+      <button class="opt">The draft bar (whiffletree) at the rear of a harrow</button>
+      <button class="opt">A curved blade on the front of a plow</button>
+      <button class="opt">The root ball of a tree pulled up by a harrow</button>
+      <button class="opt">A leather strap in a horse's harness</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>2. In "heeltree," the "tree" means…</p>
+      <button class="opt">An oak that grows at the edge of fields</button>
+      <button class="opt">A wooden beam — the same "tree" as in axletree and whiffletree</button>
+      <button class="opt">The wooden handle of a farm tool</button>
+      <button class="opt">A family tree of farmers</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>3. What does a harrow do?</p>
+      <button class="opt">Plants seeds in neat rows</button>
+      <button class="opt">Hauls hay from the field to the barn</button>
+      <button class="opt">Drags iron teeth over plowed land to break clods and level the soil</button>
+      <button class="opt">Sharpens the blades of a plow</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="heeltree-surreal.jpg" alt="A weathered wooden draft bar lying in a harrowed field at dusk, the clouds above combed into furrow-rows">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Widescreen surreal painting: an old wooden whiffletree draft bar — a long weathered oak beam with iron fittings and a harness chain — lying alone in a freshly harrowed field at deep blue dusk, long parallel furrows stretching to the horizon, no horse, no farmer, no harrow frame attached; one quiet impossibility — the clouds overhead have been combed into the same neat parallel furrows as the field, as if the harrow tilled the sky itself. Painterly, quiet, cinematic lighting, no people, no text.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · harrow → whiffletree → <b>heeltree</b><br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('heeltree');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — the draft bar at the heel, the rear, of the harrow.",
+     "Not quite — it's the draft bar (whiffletree) at the back of the harrow."],
+    ["Correct — a wooden beam, same \u201ctree\u201d as axletree and whiffletree.",
+     "Not quite — here \u201ctree\u201d means a wooden beam, like axletree."],
+    ["Correct — iron teeth dragged over plowed ground, smashing clods flat.",
+     "Not quite — the harrow breaks up and levels plowed soil."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — the furrows run straight and true." :
+          score === 2 ? "2 / 3 — the team pulls even. Good enough for field work." :
+          "0\u20131 / 3 — back to the barn. Scroll up and re-hitch.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
