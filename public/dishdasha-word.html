@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISHDASHA — One Robe, Three Names</title>
+<style>
+  :root{
+    --ink:#0d1320;
+    --ink2:#141b2c;
+    --sand:#efe3c8;
+    --sand-dim:#b3a684;
+    --gold:#d9a441;
+    --dusk:#5a6fa8;
+    --fog:#8a90a3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--sand);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #1c2742 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:8px;color:var(--sand);
+    text-shadow:0 0 40px rgba(217,164,65,.35);
+    font-weight:400;
+  }
+  .threads{margin:26px auto 8px;width:220px;position:relative;height:64px}
+  .threads .bar{
+    height:5px;background:linear-gradient(var(--gold),#6e5614);border-radius:3px;
+  }
+  .threads span{
+    position:absolute;top:5px;width:2px;background:linear-gradient(#b3a684,transparent);
+    border-radius:2px;animation:sway 3.1s ease-in-out infinite;
+  }
+  .threads span:nth-child(2){left:22%;height:48px;animation-delay:0s}
+  .threads span:nth-child(3){left:50%;height:60px;animation-delay:.7s}
+  .threads span:nth-child(4){left:78%;height:42px;animation-delay:1.4s}
+  @keyframes sway{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-5deg)}}
+  .phonetic{
+    font-style:italic;color:var(--sand-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #26304a;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--sand);font-style:normal}
+  /* anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #26304a;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101728;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1a2033}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .frag .ar{font-size:20px;color:var(--sand-dim)}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101728;border:1px solid #26304a;color:var(--sand-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--dusk);border-color:var(--dusk);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--sand);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--dusk);font-style:italic}
+  .tl-panel p{color:#d3c9ac}
+  .quote{
+    border-left:3px solid var(--dusk);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101728;border:1px solid #26304a;
+    color:var(--sand);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#16211a}
+  .opt.wrong{border-color:#a03a3a;background:#221416}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#0b0f1a;border:1px dashed #3d4a6e;border-radius:8px;
+    padding:20px;font-size:15px;color:#d3c9ac;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #26304a}
+  .seedcap{font-size:13px;color:var(--fog);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--sand-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">DISHDASHA</h1>
+    <div class="threads" aria-hidden="true"><div class="bar"></div><span></span><span></span><span></span></div>
+    <div class="phonetic">/ˈdɪʃˌdæʃə/ &nbsp;·&nbsp; dish-DASH-uh &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="dishdasha-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition</h2>
+    <p class="def"><strong>Dishdasha</strong> — an ankle-length, long-sleeved robe worn by men across the Arab world, usually white, usually collarless. From Arabic <strong>دِشْدَاشَة</strong> (dishdāsha); the word crossed into English in the 19th century.</p>
+    <p class="hint">It looks like one long syllable wearing another long syllable. Say it twice and it starts to sound like fabric.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>One garment, three names — tap each to see where it's said:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">thawb <span class="ar">ثَوْب</span></div>
+        <div class="gloss">Literally "garment" in Standard Arabic. The name in Saudi Arabia, Yemen, Bahrain, Qatar, and Palestine — and the main formal attire for men in Saudi Arabia.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">dishdasha <span class="ar">دِشْدَاشَة</span></div>
+        <div class="gloss">The name in the Levant, Iraq, Kuwait, Oman, and Hadhramaut. Same robe, different map — the word you use marks where you stand.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">kandura <span class="ar">كَنْدُورَة</span></div>
+        <div class="gloss">The name in the UAE and across North Africa (also gandura). Three names for one robe, drawn on the same desert.</div>
+      </div>
+    </div>
+    <p class="hint">So the anatomy isn't in the syllables — it's in the geography. The word is a map.</p>
+  </section>
+
+  <section class="card">
+    <h2>A Robe in Four Eras</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Centuries back</button>
+      <button class="tl-btn" data-era="1">1800s</button>
+      <button class="tl-btn" data-era="2">The color code</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Centuries back</span> — The desert invents it</h3>
+      <p>Long, loose, ankle-length robes in the Arabian Peninsula go back to the Middle Ages and earlier — engineered by climate before fashion: loose cut for airflow, full coverage for sun and sand, modesty built into the silhouette.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1800s</span> — The word crosses over</h3>
+      <p>Travelers, traders, and colonial officers bring the garment's name home, and <i>dishdasha</i> enters English in the 19th century — from Arabic <i>dišdāša</i>, no translation attempted. Some words arrive as cargo, not as concepts.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The color code</span> — White in summer</h3>
+      <p>The wardrobe has a thermostat: white and light fabrics for the scorching summer — they throw the heat back — and darker, heavier weaves like wool for winter. The color isn't decoration; it's engineering.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — National dress</h3>
+      <p>The robe is now national dress across the Gulf, worn from Friday prayers to boardrooms, and has traveled with diaspora communities worldwide — in South Asia it's often called the <i>jubba</i>. One cut of cloth, half the planet.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Word Is a Map</h2>
+    <p>The dishdasha's best trick is that it refuses one name. <i>Thawb</i> in Riyadh, <i>dishdasha</i> in Kuwait City, <i>kandura</i> in Dubai — the robe doesn't change at the border, only the word does. Ask a man what he calls it and you've learned where he's from.</p>
+    <div class="quote">
+      "Thawb, thobe, dishdasha, kandura — they all refer to the same style of modest, full-length garment."
+      <cite>— on the robe's many names across the Arab world</cite>
+    </div>
+    <p class="hint">Funny-looking word on a phone screen; a whole geography underneath. That's the Blossom jackpot.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. A dishdasha is…</p>
+      <button class="opt">An ankle-length, long-sleeved robe worn by men in the Arab world</button>
+      <button class="opt">A type of embroidered headscarf</button>
+      <button class="opt">A desert wind that arrives at dusk</button>
+      <button class="opt">A spice blend used in Gulf cooking</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>2. In Saudi Arabia the same garment is usually called…</p>
+      <button class="opt">A kandura</button>
+      <button class="opt">A thawb (thobe) — literally "garment" in Arabic</button>
+      <button class="opt">A jubba</button>
+      <button class="opt">A kaftan</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>3. Why white in summer?</p>
+      <button class="opt">White dye was the cheapest available</button>
+      <button class="opt">Religious law requires it</button>
+      <button class="opt">White fabric throws the desert heat back — it's climate engineering</button>
+      <button class="opt">So the robe is visible at night</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="dishdasha-surreal.jpg" alt="A white dishdasha on a tailor's stand in an empty desert at dusk, its shadow falling toward the sun">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Widescreen surreal painting: a pristine white dishdasha (long ankle-length Arab robe with long sleeves) displayed on a simple wooden tailor's stand, standing alone in the middle of an empty desert at deep blue dusk, its sleeves lifted by a wind that touches nothing else around it, fine sand undisturbed; one quiet impossibility — the robe's long shadow falls toward the low sun instead of away from it. Painterly, quiet, cinematic lighting, no people, no text.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · thawb → dishdasha → <b>kandura</b><br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('dishdasha');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — ankle-length, long sleeves, worn by men across the Arab world.",
+     "Not quite — it's the long white robe itself."],
+    ["Correct — <i>thawb</i>, literally \u201cgarment\u201d in Arabic.",
+     "Not quite — in Saudi Arabia it's the <i>thawb</i> (thobe)."],
+    ["Correct — white throws the heat back. Climate engineering, not decoration.",
+     "Not quite — white reflects the desert heat."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — the robe hangs perfectly. No wrinkles." :
+          score === 2 ? "2 / 3 — the tailor nods approvingly." :
+          "0\u20131 / 3 — back to the fitting room. Scroll up.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
