@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MYSTICETE — The Mouse-Whale</title>
+<style>
+  :root{
+    --ink:#0d1020;
+    --ink2:#161a30;
+    --parchment:#e6ddc3;
+    --parchment-dim:#a8a07e;
+    --gold:#d9a441;
+    --star:#9aa7c7;
+    --ash:#8f9a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #232847 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c3252;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2c3252;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101325;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1d2138}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #2c3252;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#101325;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101325;border:1px solid #2c3252;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#141824}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101325;border:1px solid #2c3252;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0b0e1c;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #2c3252}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">MYSTICETE</h1>
+    <div class="phonetic">/ˈmɪstɪˌsiːt/ &nbsp;·&nbsp; MISS-tih-seet &nbsp;·&nbsp; noun · zoology</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="mysticete-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Mysticete</strong> — a baleen whale. Any whale of the suborder Mysticeti: blue whales, humpbacks, finbacks, right whales. No teeth — rows of baleen plates sieve plankton from the water.</p>
+    <p class="plain">Say it out loud: <b>MISS-tih-seet</b>. Tonight's board hid the largest animal that ever lived behind an ordinary-looking word — and the word itself is a 2,000-year-old typo. This one was a pangram on the board, using all seven letters, and it went unfound. The best word of the night was the one nobody played.</p>
+    <p class="hint">From New Latin <i>mysticētus</i>, from Greek <i>mustikētos</i> — a copyist's error for <i>ho mūs to kētos</i>, "the mouse, the whale."</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>One whale, one mouse, one slip of the pen — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">mūs</div>
+        <div class="gloss"><b>"The mouse."</b> — Greek <i>mūs</i>, mouse. Aristotle wrote of <i>ho mūs to kētos</i>, "the mouse, the whale" — his phrase for an unknown kind of aquatic animal. Maybe irony, maybe scale: next to the great whales, anything looks like a mouse.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">kētos</div>
+        <div class="gloss"><b>"The whale."</b> — Greek <i>kētos</i>, sea monster, whale. The root of <i>cetacean</i>, of <i>Cetus</i> the constellation, of every whale-word since.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">mustikētos</div>
+        <div class="gloss"><b>"The typo."</b> — Some early modern copy of Aristotle's <i>Historia Animalium</i> fused "mouse-whale" into a single word, <i>mustikētos</i> — and the error became the name. The largest animal that ever lived sails under a copyist's slip.</div>
+      </div>
+    </div>
+    <p class="hint">Mouse in the phrase, whale in the sea, typo in the dictionary. Same word, three lives.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>Three facts that have to be held together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Baleen Whale</h3>
+        <p>No teeth. Rows of baleen plates hang from the upper jaw and strain plankton from the water like a sieve. The blue whale — the biggest animal known to have ever existed — is a mysticete.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Mouse-Whale</h3>
+        <p>Aristotle called some unknown sea creature "the mouse, the whale." A copyist's slip fused the phrase into one word, and the slip became official. Science kept the typo.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Mustache It Should Have Had</h3>
+        <p>The corrected name is <i>Mystacoceti</i>: <i>mystax</i> (mustache) + <i>ketos</i> (whale). The frayed edge of the baleen looks like a mustache. The better name lost; the typo won.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Typo</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Aristotle</button>
+      <button class="tl-btn" data-era="1">The Copyist</button>
+      <button class="tl-btn" data-era="2">1825–35</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Aristotle</span> — The Mouse, the Whale</h3>
+      <p>In <i>Historia Animalium</i>, Aristotle writes of <i>ho mūs to kētos</i> — "the mouse, the whale" — an unknown aquatic animal. Two words, one mystery.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Copyist</span> — The Slip</h3>
+      <p>Early modern editions miscopy the phrase as a single word, <i>mustikētos</i>. Nobody catches it. The error enters the dictionaries and stays.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1825–35</span> — The Name Enters English</h3>
+      <p><i>Mysticete</i> is first recorded in English, and the suborder <i>Mysticeti</i> is named for the typo. The whale gets its title from a transcription error.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Still the Typo</h3>
+      <p>Blue whales, humpbacks, finbacks, right whales — the largest animals ever known, all sailing under a copyist's error. The mustache name, <i>Mystacoceti</i>, waits in the wings, more appropriate and unused.</p>
+    </div>
+    <div class="rule">
+      The largest animal that ever lived, named by a typo.
+      <cite>— the mysticete's whole story, in one line</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. A mysticete is…</p>
+      <button class="opt">A baleen whale</button>
+      <button class="opt">A toothed whale</button>
+      <button class="opt">A kind of shark</button>
+      <button class="opt">A deep-sea fish</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The name comes from…</p>
+      <button class="opt">A copyist's error for Greek "the mouse, the whale"</button>
+      <button class="opt">Greek <i>mystikos</i>, "mysterious"</button>
+      <button class="opt">Latin <i>mysticus</i>, "mystic"</button>
+      <button class="opt">Old Norse <i>mistr</i>, "mist"</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. The "correct" name it should have had is…</p>
+      <button class="opt"><i>Mystacoceti</i>, "mustache-whale"</button>
+      <button class="opt"><i>Odontoceti</i>, the toothed whales</button>
+      <button class="opt"><i>Balaenoptera</i>, the rorquals</button>
+      <button class="opt"><i>Cetotherium</i>, an extinct genus</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="mysticete-surreal.jpg" alt="A colossal baleen whale surfacing at dusk, a single tiny field mouse standing calmly on its snout">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: a colossal baleen whale surfacing in still, dusk-lit ocean water; one quiet impossibility — a single tiny brown field mouse standing calmly on the whale's snout, as if it belongs there. Cinematic light, deep teal and amber tones, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · mysticete, the mouse-whale<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('mysticete');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — a baleen whale. No teeth, just baleen and plankton.",
+     "Not quite — a mysticete is a baleen whale. The toothed ones are odontocetes."],
+    ["Correct — a copyist's error for 'the mouse, the whale.' The 'mysterious' story is folk etymology.",
+     "Not quite — the real story is a copyist's error for 'the mouse, the whale.' 'Mysterious' is the folk version."],
+    ["Correct — Mystacoceti, 'mustache-whale.' The better name lost to the typo.",
+     "Not quite — Mystacoceti, 'mustache-whale.' The baleen fringe looks like a mustache."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — mouse, whale, and typo, all caught." :
+          score === 2 ? "2 / 3 — most of the whale surfaced." :
+          "0–1 / 3 — the whale slipped away. Scroll up and read it again — it's worth a second look.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
