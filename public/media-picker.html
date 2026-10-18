@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pick the Media Page Images</title>
+<style>
+  :root{--ink:#121013;--ink2:#1b181e;--parchment:#e8dcc0;--parchment-dim:#b9a97f;--gold:#c9a227;--fog:#8a8494}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--parchment);font-family:Georgia,'Times New Roman',serif;line-height:1.65;min-height:100vh}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:56px 0 10px}
+  .kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--fog);margin-bottom:18px}
+  h1{font-size:clamp(32px,7vw,58px);letter-spacing:4px;font-weight:400}
+  .intro{font-style:italic;color:var(--parchment-dim);font-size:18px;margin:14px 0 8px;text-align:center}
+  .steps{color:var(--fog);font-size:15px;text-align:center;margin-bottom:30px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .card{background:var(--ink2);border:1px solid #2c2833;border-radius:10px;overflow:hidden;cursor:pointer;transition:.2s}
+  .card:hover{border-color:var(--gold)}
+  .card.checked{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+  .card img,.card video{width:100%;display:block;aspect-ratio:4/3;object-fit:cover;background:#0e0c10}
+  .card .meta{padding:12px 14px}
+  .card .w{font-size:17px;letter-spacing:2px}
+  .card .d{font-size:13px;color:var(--fog);font-style:italic}
+  .card label{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--gold);cursor:pointer}
+  .card input{width:18px;height:18px;accent-color:var(--gold);cursor:pointer}
+  .bar{position:sticky;bottom:0;background:var(--ink);border-top:1px solid #2c2833;padding:18px 0;margin-top:34px;text-align:center}
+  .bar button{background:var(--gold);border:none;color:var(--ink);font-family:inherit;font-size:15px;letter-spacing:2px;padding:12px 28px;border-radius:6px;cursor:pointer;font-weight:bold}
+  .bar button:hover{filter:brightness(1.1)}
+  #count{color:var(--fog);font-size:14px;margin-top:8px}
+  textarea{width:100%;max-width:640px;height:120px;margin:16px auto 0;display:block;background:#0e0c10;border:1px solid #2c2833;border-radius:8px;color:var(--parchment);font-family:inherit;font-size:14px;padding:12px}
+  .note{color:var(--fog);font-size:13px;font-style:italic;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Media page picker</div>
+    <h1>PICK YOUR BEST</h1>
+    <p class="intro">Check the images you want on the media page. Ibid's picks are already decided — these are yours.</p>
+    <p class="steps">1. Check your picks &nbsp;·&nbsp; 2. Copy my picks &nbsp;·&nbsp; 3. Paste the list back to Ibid</p>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="bar">
+    <button id="copyBtn">COPY MY PICKS</button>
+    <div id="count">0 selected</div>
+    <textarea id="out" readonly placeholder="Your picks will appear here — copy them and paste the list back to Ibid."></textarea>
+    <p class="note">If the copy button doesn't work in your browser, select the text in the box above and copy it by hand.</p>
+  </div>
+</div>
+
+<script>
+const CANDIDATES = [
+  ["marshalsea-surreal.jpg","MARSHALSEA","Oct 5 — debtors' prison, 1824","img"],
+  ["potoroo-surreal.jpg","POTOROO","Oct 6 — rat-kangaroo over a moonlit desert","img"],
+  ["borborygmus-surreal.jpg","BORBORYGMUS","Oct 7 — stomach-cloud beast in a bow tie","img"],
+  ["guignol-surreal.jpg","GUIGNOL","Oct 7 — Grand-Guignol theatre","img"],
+  ["dishdasha-surreal.jpg","DISHDASHA","Oct 9 — robe in the desert","img"],
+  ["heeltree-surreal.jpg","HEELTREE","Oct 10 — draft bar, furrowed sky","img"],
+  ["mneme-surreal.jpg","MNEME","Oct 11 — Night 1","img"],
+  ["needfire-surreal.jpg","NEEDFIRE","Oct 12 — Night 2","img"],
+  ["palilalia-surreal.jpg","PALILALIA","Oct 13 — Night 3","img"],
+  ["tangantangan-surreal.jpg","TANGANTANGAN","Oct 14 — Night 4","img"],
+  ["eterne-surreal.jpg","ETERNE","Oct 15 — Night 5","img"],
+  ["ngwee-surreal.jpg","NGWEE","Oct 16 — Night 6","img"],
+  ["mysticete-surreal.jpg","MYSTICETE","Oct 17 — Night 7, whale + mouse","img"],
+  ["media/neil-peart-drum-solo-spectrogram.jpg","SPECTROGRAM","Neil Peart drum solo — true data","img"],
+  ["media/80s-collage.jpg","80S COLLAGE","Four models, four personas","img"],
+  ["media/80s-professor.jpg","80S PROFESSOR","The professor portrait","img"],
+  ["media/mysticete-baleen-feeding.mp4","BALEEN VIDEO","How a mysticete eats","video"]
+];
+const grid = document.getElementById('grid');
+CANDIDATES.forEach(([src, word, desc, kind]) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  const media = kind === 'video'
+    ? `<video src="${src}" preload="metadata" controls></video>`
+    : `<img src="${src}" alt="${word}" loading="lazy">`;
+  card.innerHTML = media + `<div class="meta"><div class="w">${word}</div><div class="d">${desc}</div><label><input type="checkbox" value="${src}"> Show this one</label></div>`;
+  const box = card.querySelector('input');
+  box.addEventListener('change', () => { card.classList.toggle('checked', box.checked); update(); });
+  card.addEventListener('click', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'VIDEO') return;
+    box.checked = !box.checked;
+    card.classList.toggle('checked', box.checked);
+    update();
+  });
+  grid.appendChild(card);
+});
+function update(){
+  const picks = [...document.querySelectorAll('input:checked')].map(b => b.value);
+  document.getElementById('count').textContent = picks.length + ' selected';
+  document.getElementById('out').value = picks.join('\n');
+}
+document.getElementById('copyBtn').addEventListener('click', async (e) => {
+  const out = document.getElementById('out');
+  const picks = [...document.querySelectorAll('input:checked')].map(b => b.value);
+  if (!picks.length) { e.target.textContent = 'PICK AT LEAST ONE FIRST'; setTimeout(() => e.target.textContent = 'COPY MY PICKS', 1600); return; }
+  try { await navigator.clipboard.writeText(out.value); }
+  catch(err){ out.select(); document.execCommand('copy'); }
+  e.target.textContent = 'COPIED ✓ — PASTE IT BACK TO IBID';
+  setTimeout(() => e.target.textContent = 'COPY MY PICKS', 2500);
+});
+</script>
+</body>
+</html>
