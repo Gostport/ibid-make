@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BORBORYGMUS — The Word That Rumbles</title>
+<style>
+  :root{
+    --ink:#121013;
+    --ink2:#1b181e;
+    --parchment:#e8dcc0;
+    --parchment-dim:#b9a97f;
+    --gold:#c9a227;
+    --blood:#8e2f32;
+    --fog:#8a8494;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #241f28 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(44px,11vw,96px);
+    letter-spacing:5px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(201,162,39,.25);
+    font-weight:400;
+  }
+  .rumble{
+    display:flex;justify-content:center;align-items:flex-end;gap:9px;margin:26px 0 8px;height:44px;
+  }
+  .rumble span{
+    width:6px;background:linear-gradient(var(--gold),#6e5614);
+    border-radius:3px;opacity:.85;animation:grumble 1.1s ease-in-out infinite;
+  }
+  .rumble span:nth-child(1){height:14px;animation-delay:0s}
+  .rumble span:nth-child(2){height:30px;animation-delay:.12s}
+  .rumble span:nth-child(3){height:44px;animation-delay:.24s}
+  .rumble span:nth-child(4){height:22px;animation-delay:.36s}
+  .rumble span:nth-child(5){height:38px;animation-delay:.48s}
+  .rumble span:nth-child(6){height:16px;animation-delay:.6s}
+  .rumble span:nth-child(7){height:32px;animation-delay:.72s}
+  @keyframes grumble{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c2833;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  /* etymology anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a3442;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#151218;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1e1a14}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#151218;border:1px solid #3a3442;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--blood);border-color:var(--blood);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--blood);font-style:italic}
+  .tl-panel p{color:#cfc4a8}
+  .quote{
+    border-left:3px solid var(--blood);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#151218;border:1px solid #3a3442;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#16211a}
+  .opt.wrong{border-color:var(--blood);background:#221416}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#0e0c10;border:1px dashed #4a4356;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc4a8;font-style:italic;
+  }
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #3a3442}
+  .seedcap{font-size:13px;color:#8a8494;font-style:italic;margin:-8px 0 16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">BORBORYGMUS</h1>
+    <div class="rumble" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="phonetic">/ˌbɔːrbəˈrɪɡməs/ &nbsp;·&nbsp; bor-buh-RIG-muhs &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="borborygmus-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition</h2>
+    <p class="def"><strong>Borborygmus</strong> — intestinal rumbling caused by the movement of gas through the intestines.</p>
+    <p class="hint">The rare medical term that doubles as a sound effect. Say it out loud; your stomach already knows it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Tap each fragment:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">borborygm-</div>
+        <div class="gloss">From New Latin, after Greek <i>borborygmos</i>, from the verb <i>borboryzein</i> — "to rumble." The Greeks coined it to <i>imitate the very sound it describes</i>: onomatopoeia wearing a lab coat.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-us</div>
+        <div class="gloss">The Latin masculine noun ending — the white coat the word wears in medical texts. Plural: <i>borborygmi</i> (bor-buh-RIG-my).</div>
+      </div>
+    </div>
+    <p class="hint">So: a Greek stomach-noise, dressed in Latin, admitted to English around 1724.</p>
+  </section>
+
+  <section class="card">
+    <h2>A Rumble in Four Acts</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Antiquity</button>
+      <button class="tl-btn" data-era="1">New Latin</button>
+      <button class="tl-btn" data-era="2">c. 1724</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Antiquity</span> — borboryzein</h3>
+      <p>Greek physicians need a verb for the gut's growling, so they mint one that <i>sounds</i> like it: <i>borboryzein</i>, to rumble. The noun <i>borborygmos</i> follows. Few medical terms are this honest about their origins — most hide behind Latin; this one gurgles.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">New Latin</span> — the scholars adopt it</h3>
+      <p>Renaissance and early-modern physicians, writing medicine in Latin, lift the Greek noun wholesale and Latinise it: <i>borborygmus</i>. It enters the learned vocabulary as the proper clinical name for a thoroughly undignified noise.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">c. 1724</span> — first known English use</h3>
+      <p>The word crosses into English (Merriam-Webster dates its first known use to about 1724). Polite society gains a dignified way to discuss what happens after beans.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — plural borborygmi</h3>
+      <p>Still the clinical term, still faintly ridiculous to say with a straight face. The adjective <i>borborygmic</i> exists for those who need it. Competitive eaters and gastroenterologists remain its primary users.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Word That Admits It</h2>
+    <p>Most etymologies are archaeology — dead roots, borrowed bones. Borborygmus is rarer: a word whose origin story <i>is</i> its meaning. The Greeks heard the stomach rumble and wrote down the rumble. Three thousand years later, the spelling still gurgles.</p>
+    <div class="quote">
+      "borborygmus — intestinal rumbling caused by moving gas: New Latin, from Greek <i>borborygmos</i>, from <i>borboryzein</i> to rumble."
+      <cite>— Merriam-Webster</cite>
+    </div>
+    <p class="hint">Funny-looking word on a phone screen; bottomless well underneath. That's the Blossom jackpot.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A borborygmus is…</p>
+      <button class="opt">A type of brass zeppelin</button>
+      <button class="opt">Intestinal rumbling caused by moving gas</button>
+      <button class="opt">A Victorian stomach tonic</button>
+      <button class="opt">A Greek war dance</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The word comes from…</p>
+      <button class="opt">Greek <i>borboryzein</i>, "to rumble"</button>
+      <button class="opt">French <i>bourbier</i>, "mud pit"</button>
+      <button class="opt">Latin <i>borbus</i>, "belly"</button>
+      <button class="opt">Old English <i>brycg</i>, "bridge"</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>3. The plural of borborygmus is…</p>
+      <button class="opt">borborygmata</button>
+      <button class="opt">borborygma</button>
+      <button class="opt">borborygmi</button>
+      <button class="opt">borborygmuses</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+        <img class="seedimg" src="borborygmus-surreal.jpg" alt="A translucent stomach-cloud beast of coiled intestinal tubing floating above an Edwardian breakfast table, wearing a black bow tie, digestive gas rising as tiny brass zeppelins">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+<div class="seedbox" id="seedText">A surreal Victorian medical-illustration beast named Borborygmus — a translucent, churning stomach-cloud of coiled intestinal tubing floating above a quiet Edwardian breakfast table, soft sepia tones, digestive gas bubbles rising as tiny brass zeppelins; one quiet impossibility: the creature purrs contentedly like a cat while wearing a black bow tie</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · borboryzein → borborygmos → <b>borborygmus</b><br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('borborygmus');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — the gut's growl, given a white coat.",
+     "Not quite — it's intestinal rumbling caused by moving gas."],
+    ["Correct — Greek <i>borboryzein</i>, to rumble. The word imitates the sound.",
+     "Not quite — it's from Greek <i>borboryzein</i>, \u201cto rumble.\u201d"],
+    ["Correct — <i>borborygmi</i> (bor-buh-RIG-my). Say it with confidence.",
+     "Not quite — the plural is <i>borborygmi</i>."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — your gut applauds. Loudly." :
+          score === 2 ? "2 / 3 — a respectable rumble." :
+          "0–1 / 3 — scroll up and listen to your stomach again.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
