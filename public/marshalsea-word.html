@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARSHALSEA — A Word With Bars On Its Windows</title>
+<style>
+  :root{
+    --ink:#121013;
+    --ink2:#1b181e;
+    --parchment:#e8dcc0;
+    --parchment-dim:#b9a97f;
+    --gold:#c9a227;
+    --blood:#8e2f32;
+    --fog:#8a8494;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #241f28 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--fog);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(52px,12vw,108px);
+    letter-spacing:6px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(201,162,39,.25);
+    font-weight:400;
+  }
+  .bars{
+    display:flex;justify-content:center;gap:10px;margin:26px 0 8px;
+  }
+  .bars span{
+    width:5px;height:44px;background:linear-gradient(var(--gold),#6e5614);
+    border-radius:3px;opacity:.85;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c2833;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  /* etymology anatomy */
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a3442;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#151218;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1e1a14}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:2px}
+  .part .gloss{font-size:14px;color:var(--fog);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .hint{font-size:13px;color:var(--fog);font-style:italic;margin-top:10px}
+  /* timeline */
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#151218;border:1px solid #3a3442;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--blood);border-color:var(--blood);color:#fff}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--blood);font-style:italic}
+  .tl-panel p{color:#cfc4a8}
+  /* dickens */
+  .quote{
+    border-left:3px solid var(--blood);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .quote cite{display:block;font-style:normal;font-size:13px;color:var(--fog);margin-top:8px}
+  /* quiz */
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#151218;border:1px solid #3a3442;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#16211a}
+  .opt.wrong{border-color:var(--blood);background:#221416}
+  .verdict{font-size:14px;font-style:italic;color:var(--fog);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  /* seed */
+  .seedbox{
+    background:#0e0c10;border:1px dashed #4a4356;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc4a8;font-style:italic;
+  }
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:#b9a97f;text-decoration:none}
+  .backnav a:hover{color:#e8dcc0}
+
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #3a3442}
+  .seedcap{font-size:13px;color:#8a8494;font-style:italic;margin:-8px 0 16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">MARSHALSEA</h1>
+    <div class="bars"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="phonetic">/ˈmɑːrʃəlsiː/ &nbsp;·&nbsp; MAR-shul-see &nbsp;·&nbsp; noun</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="marshalsea-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition</h2>
+    <p class="def"><strong>Marshalsea</strong> — a debtors' prison in Southwark, London; by extension, any place of confinement for those who owe what they cannot pay.</p>
+    <p class="hint">It is one of those rare words that is also a street address in history — you could have posted a letter there.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Tap each fragment:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">marshal</div>
+        <div class="gloss">Middle English <i>marschal</i> — a high officer of the royal household. The Knight Marshal ran a court with jurisdiction over the household's debts and brawls.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-sea</div>
+        <div class="gloss">Not the ocean. From <i>-see / -cy</i>, as in <i>chancery</i> — the office, jurisdiction, or court of. The Marshalsea was literally "the Marshal's court" — and its prison.</div>
+      </div>
+    </div>
+    <p class="hint">So: the Marshal's jurisdiction → the Marshal's court → the Marshal's prison → every debtor's nightmare.</p>
+  </section>
+
+  <section class="card">
+    <h2>A Prison in Four Acts</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">1300s</button>
+      <button class="tl-btn" data-era="1">1811</button>
+      <button class="tl-btn" data-era="2">1824</button>
+      <button class="tl-btn" data-era="3">1842 →</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">1300s</span> — The Marshal's dungeon</h3>
+      <p>The Knight Marshal's court needs somewhere to put debtors and troublemakers from the royal household. A prison rises in Southwark, across the Thames from the City — conveniently outside the City's jurisdiction. It will hold the indebted for five centuries.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1811</span> — The new Marshalsea</h3>
+      <p>The old buildings are condemned as unfit. A new prison opens nearby: 8,000 square feet, a chapel, and a grim hierarchy — those who could pay rent got rooms; those who couldn't slept in the common wards. Debt was democratic; comfort was not.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1824</span> — The Dickens family arrives</h3>
+      <p>John Dickens, a naval pay clerk with champagne tastes and a clerk's wages, is jailed for a <b>£40 debt</b> to a baker. His wife and younger children move in with him — debtors' families often lived inside. Twelve-year-old Charles is sent to work in a blacking factory. He never forgives, and never forgets.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1842 →</span> — The afterlife</h3>
+      <p>The prison closes; the last debtors are marched to the King's Bench. But the Marshalsea refuses to die: in 1855 Dickens begins serialising <i>Little Dorrit</i>, whose heroine Amy is born inside its walls — "the Child of the Marshalsea." The prison outlives itself as literature.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The Dickens Chapter</h2>
+    <p>Dickens scholars agree: the Marshalsea chapter of his life is the wound everything else grew around — the blacking factory, the shame, the obsession with debt, prisons, and institutions that grind small people down.</p>
+    <div class="quote">
+      "The day when she was born... the Marshalsea became a new star in the heavens."
+      <cite>— Little Dorrit (1855–57), on Amy Dorrit's birth inside the prison</cite>
+    </div>
+    <p class="hint">Funny-looking word on a phone screen; bottomless well underneath. That's the Blossom jackpot.</p>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="0">
+      <p>1. The Marshalsea was…</p>
+      <button class="opt">A debtors' prison in Southwark</button>
+      <button class="opt">A type of Tudor warship</button>
+      <button class="opt">A marsh-dwelling bird</button>
+      <button class="opt">A marshal's ceremonial sword</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>2. Which Dickens novel is set there?</p>
+      <button class="opt">Bleak House</button>
+      <button class="opt">Little Dorrit</button>
+      <button class="opt">Oliver Twist</button>
+      <button class="opt">Great Expectations</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>3. Dickens' personal connection to the Marshalsea?</p>
+      <button class="opt">He was a prison guard there</button>
+      <button class="opt">He was born inside its walls</button>
+      <button class="opt">His father was jailed there for debt in 1824</button>
+      <button class="opt">He bought the building in 1842</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+        <img class="seedimg" src="marshalsea-surreal.jpg" alt="The Marshalsea debtors' prison yard in 1824 seen through iron bars, a boy offering cheese to a mouse, lightning over Southwark">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+<div class="seedbox" id="seedText">The Marshalsea debtors' prison, Southwark 1824: rain-slicked cobblestone yard glimpsed through iron-barred windows, debtors in threadbare coats huddled under a leaking arcade, a small boy pressing his face to the bars, gaslight guttering in the fog, Dickensian gloom, monochrome etching style, deep shadows</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · marshaless → marshalesse → <b>marshalsea</b><br>
+    the funny-looking ones are always load-bearing
+      <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+</footer>
+
+</div>
+
+<script>
+  // Pronunciation: play the recorded clip; fall back to browser speech
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('Marshalsea');
+      u.lang = 'en-GB'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  // Timeline tabs
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+
+  // Quiz
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — Southwark, south bank of the Thames, five centuries of debtors.",
+     "Not quite — it was a debtors' prison in Southwark, London."],
+    ["Correct — Amy Dorrit, the Child of the Marshalsea.",
+     "Not quite — it's Little Dorrit (1855–57)."],
+    ["Correct — John Dickens, £40 owed to a baker, 1824. Twelve-year-old Charles went to the blacking factory.",
+     "Not quite — his father John was jailed there for debt in 1824."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.textContent = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.textContent = verdicts[qi][1]; }
+      if (answered === 3) {
+        document.getElementById('score-line').textContent =
+          score === 3 ? "3 / 3 — free of debt. You may leave the Marshalsea." :
+          score === 2 ? "2 / 3 — respectable. The turnkey nods you through." :
+          "Debtor! Back to the common ward — scroll up and try again.";
+      }
+    }));
+  });
+
+  // Copy seed prompt
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
