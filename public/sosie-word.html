@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOSIE — The Man Who Met Himself</title>
+<style>
+  :root{
+    --ink:#0d1020;
+    --ink2:#161a30;
+    --parchment:#e6ddc3;
+    --parchment-dim:#a8a07e;
+    --gold:#d9a441;
+    --star:#9aa7c7;
+    --ash:#8f9a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #232847 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c3252;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2c3252;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101325;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1d2138}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #2c3252;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#101325;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101325;border:1px solid #2c3252;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#141824}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101325;border:1px solid #2c3252;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0b0e1c;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #2c3252}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">SOSIE</h1>
+    <div class="phonetic">/ˈsoʊzi/ &nbsp;·&nbsp; SOH-zee &nbsp;·&nbsp; noun · French</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="sosie-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Sosie</strong> — a person's exact double; a living look-alike. In French it is the everyday word for a double, and especially for a celebrity look-alike or impersonator.</p>
+    <p class="plain">Say it out loud: <b>SOH-zee</b>. Tonight's board was thick with soup words and superioresses, and hiding in the S's was this: a common noun that is a stolen name. A sosie isn't a twin and isn't a ghost — it's a stranger wearing your face.</p>
+    <p class="hint">From French <i>sosie</i>, from Latin <i>Sosia</i> — the slave in Plautus's <i>Amphitruo</i> (c. 200 BC), whose shape the god Mercury takes.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>A name, a theft, a word — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">Sosia</div>
+        <div class="gloss"><b>"The man."</b> — Amphitryon's slave, sent home ahead with news of the victory. On his own doorstep he meets a man with his face, his name, and a better claim to both than he can muster.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">Mercury</div>
+        <div class="gloss"><b>"The thief."</b> — The god Mercury, wearing Sosia's exact shape to guard the door. He argues Sosia out of his own identity — then beats him with his fists and sends him away.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">sosie</div>
+        <div class="gloss"><b>"The word."</b> — French took the victim's name and made it the common noun for any double at all. The man lost his name in the play; the language kept it, for everyone else's double, forever.</div>
+      </div>
+    </div>
+    <p class="hint">Sosia never got his name back. Every look-alike since has been borrowing it.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>Three facts that have to be held together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Double</h3>
+        <p>Not a twin, not a relative, not a ghost. A sosie is a living stranger who looks exactly like someone else — close enough to be waved at in the street by people who know the original.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Look-Alike</h3>
+        <p>In modern French, <i>un sosie</i> is the everyday word for a celebrity double — the Elvis at the fair, the queen at the garden party. Look-alike contests judge strangers on how completely they are somebody else.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Stolen Name</h3>
+        <p>Under the comedy sits the eerie part: if someone else has your face and your name, what proof do you have left that you're you? Sosia's evidence — "he beat me, and I was wide awake" — convinced nobody.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Stolen Name</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">c. 200 BC</button>
+      <button class="tl-btn" data-era="1">The Doorstep</button>
+      <button class="tl-btn" data-era="2">French</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">c. 200 BC</span> — Plautus Stages the Theft</h3>
+      <p>Plautus stages <i>Amphitruo</i> in Rome: Jupiter is scheming, and Mercury guards the door wearing Sosia's face. The original double-act, two thousand years before look-alike contests.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Doorstep</span> — Argued Out of His Name</h3>
+      <p>Mercury-as-Sosia out-argues the real Sosia on his own doorstep, beats him with his fists, and sends him home doubting he exists. Sosia's whole defense: he saw the man wide awake.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">French</span> — The Name Becomes a Word</h3>
+      <p>The name crosses into French as <i>sosie</i>, the common noun for a double. Not the god's name, not the master's — the victim's. The word remembers who paid.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Doubles Everywhere</h3>
+      <p>Celebrity look-alikes, impersonator contests, the stranger on the train you almost greet. English borrows <i>sosie</i> for the purest case: an exact double, no relation at all.</p>
+    </div>
+    <div class="rule">
+      "I saw him wide awake… and that man was wide awake when he beat me up with his fists."
+      <cite>— Sosia, in Plautus's <i>Amphitruo</i>, defending his own existence</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A sosie is…</p>
+      <button class="opt">A small French pastry</button>
+      <button class="opt">A person who is another's exact double</button>
+      <button class="opt">A soup served cold</button>
+      <button class="opt">A step in a waltz</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>2. The word comes from Sosia, who was…</p>
+      <button class="opt">A Roman emperor</button>
+      <button class="opt">The Greek god of mirrors</button>
+      <button class="opt">A Parisian chef</button>
+      <button class="opt">The slave in Plautus's <i>Amphitruo</i> whose shape Mercury stole</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. In the play, Mercury, wearing Sosia's face,…</p>
+      <button class="opt">Beats the real Sosia and sends him home doubting his own name</button>
+      <button class="opt">Marries Sosia's sweetheart</button>
+      <button class="opt">Makes Sosia king for a day</button>
+      <button class="opt">Teaches Sosia to cook</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>4. In modern French, <i>un sosie</i> most often means…</p>
+      <button class="opt">An identical twin</button>
+      <button class="opt">A maker of mirrors</button>
+      <button class="opt">A celebrity look-alike or impersonator</button>
+      <button class="opt">A passport photograph</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="sosie-surreal.jpg" alt="A man at a Paris café table across from his exact double — identical face, identical coat, two coffees — and only one shadow on the floor">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal painterly scene: a quiet Paris café at dusk, warm lamplight. A man in a dark wool coat sits at a small round marble table across from his exact double — identical face, identical coat, identical posture, a cup of coffee before each of them. One quiet impossibility: the low sun throws long shadows across the café floor from everything in the room, but only one of the two men casts a shadow. Muted teal and amber palette, soft film grain, dreamlike stillness, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · sosie, the double<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('sosie');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — an exact double. Not a twin, not a ghost: a stranger wearing your face.",
+     "Not quite — a sosie is a person's exact double. The soup words were the board's other temptation."],
+    ["Correct — Sosia, Amphitryon's slave, who met Mercury wearing his face on his own doorstep.",
+     "Not quite — Sosia was the slave in Plautus's Amphitruo. Mercury stole his shape and his name."],
+    ["Correct — argued out of his name, beaten with fists, sent home unsure he exists.",
+     "Not quite — Mercury beats him and sends him home doubting his own name. Comedy for everyone but Sosia."],
+    ["Correct — the Elvis at the fair is un sosie. The victim's name became the profession.",
+     "Not quite — in modern French, un sosie is a celebrity look-alike or impersonator."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — you'd know your own face anywhere." :
+          score === 3 ? "3 / 4 — one double slipped past you." :
+          "0–2 / 4 — somewhere out there, your sosie got them all right.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
