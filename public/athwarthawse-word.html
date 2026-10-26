@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- athwarthawse-word v1.0 — Oct 25, 2026 (Blossom Night 11) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATHWART-HAWSE — The Crossed Cables</title>
+<style>
+  :root{
+    --ink:#0d1020;
+    --ink2:#161a30;
+    --parchment:#e6ddc3;
+    --parchment-dim:#a8a07e;
+    --gold:#d9a441;
+    --star:#9aa7c7;
+    --ash:#8f9a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #232847 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(34px,8.5vw,72px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c3252;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2c3252;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101325;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1d2138}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #2c3252;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#101325;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101325;border:1px solid #2c3252;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#141824}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101325;border:1px solid #2c3252;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0b0e1c;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #2c3252}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">ATHWART-HAWSE</h1>
+    <div class="phonetic">/əˈθwɔːrt hɔːz/ &nbsp;·&nbsp; uh-THWORT-hawz &nbsp;·&nbsp; nautical · "lying across the bow"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="athwarthawse-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Athwart-hawse</strong> — the position of a ship at anchor that lies across the bow of another ship, so that her anchor cable runs across the other's. A crossed, tangled, dangerous berth.</p>
+    <p class="plain">Picture a crowded anchorage at night. Every ship swings slowly around her anchor with the wind and tide — and one of them swings <b>across</b>: her bow ends up parked in front of her neighbor's bow, her cable stretched over the neighbor's cable like a tripwire. Neither ship can move without grinding against the other, and if the weather turns, the two hulls and four cables become one problem. That predicament — not a maneuver, a <i>predicament</i> — is athwart-hawse.</p>
+    <p class="hint">The word is a photograph in two pieces: <i>athwart</i>, "across," and <i>hawse</i>, the bow of the ship where the anchor cables run out through the hawse pipes. Put together: "across the cable-eyes."</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>A direction, a body part, and a tangle — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">athwart</div>
+        <div class="gloss"><b>"Across, crosswise."</b> — From Old Norse <i>þvert</i>, across. It's the living root of <i>thwart</i>: to thwart a plan is to lie across its path. Anything athwart is sideways to the way things ought to run — "athwart the current," "athwart his intentions."</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">hawse</div>
+        <div class="gloss"><b>"The neck of the ship."</b> — From Old Norse <i>háls</i>, neck: the hawse is the bow section pierced by the hawse pipes, the iron-lined holes the anchor cables pass through. A ship's cables leave her body at the hawse the way breath leaves a throat.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">athwart-hawse</div>
+        <div class="gloss"><b>"Across the neck."</b> — One ship lying over the other's cable-eyes, cables crossed in an X beneath the surface. Sailors graded the mess: a <i>foul hawse</i> meant your cables were tangled; a <i>clear hawse</i>, untwisted and free. Athwart-hawse is how the fouling began.</div>
+      </div>
+    </div>
+    <p class="hint">Two Norse words, one bad night at anchor.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>Three facts that have to be held together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Geometry</h3>
+        <p>Two ships, two anchors, one X. Each vessel hangs from her own cable, and the cables cross — which means each ship is now partly moored to the other's ground tackle. Geometry has made them partners whether they like it or not.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Danger</h3>
+        <p>Ships at anchor never sit still; they swing, surge, and sag with every shift of wind. Crossed ships swing <i>into</i> each other. Hulls grind, rigging fouls, cables chafe through — and clearing the mess in a rising gale, in the dark, was among the anchorage's worst chores.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Family</h3>
+        <p>The word sails with a crew of kin: <i>foul hawse</i> and <i>clear hawse</i> for tangled and untangled cables, <i>athwart</i> for anything lying crosswise to its proper course — and on dry land, <i>thwarted</i>, for every plan something has lain down across.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Crossed Word</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">The Anchorage</button>
+      <button class="tl-btn" data-era="1">Hawse &amp; Cable</button>
+      <button class="tl-btn" data-era="2">The Law Courts</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">The Anchorage</span> — Where Ships Slept in Crowds</h3>
+      <p>In the age of sail, fleets and merchantmen anchored in dense roadsteads, each captain choosing a berth by eye and instinct. Choose badly — or swing badly in the night — and you woke athwart somebody's hawse, with the whole anchorage watching you sort it out.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Hawse &amp; Cable</span> — Hemp, Then Chain</h3>
+      <p>Early cables were hemp, thick as a man's thigh, and a crossed pair could chafe through in a single tide. Iron chain, arriving in the early 1800s, survived the chafe but tangled worse — clearing a foul hawse of chain could take a working party the better part of a day.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Law Courts</span> — Whose Fault Was the X?</h3>
+      <p>When crossed ships damaged each other, admiralty courts had to decide who lay athwart whom, and who had failed to keep a clear berth. The word earned a second life in case law: dry, precise, and attached to money — the surest way for a seaman's term to outlive the sea.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — A Ghost With One Living Heir</h3>
+      <p>Modern harbors assign berths, and athwart-hawse has slipped out of working speech into dictionaries and word games — a fossil. But its root walks around unrecognized every day: every time a plan is <i>thwarted</i>, something has lain down athwart it.</p>
+    </div>
+    <div class="rule">
+      Two ships can share a harbor. They cannot share a hawse.
+      <cite>— the athwart-hawse, in one line</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="2">
+      <p>1. A ship lying athwart-hawse is…</p>
+      <button class="opt">Racing before the wind under full sail</button>
+      <button class="opt">Sunk at her moorings</button>
+      <button class="opt">Lying across another ship's bow, their anchor cables crossed</button>
+      <button class="opt">Flying no flag, for reasons nobody asks about</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The "hawse" is…</p>
+      <button class="opt">The bow of the ship, where the anchor cables run out through the hawse pipes</button>
+      <button class="opt">The captain's quarters, aft</button>
+      <button class="opt">A heavy storm sail</button>
+      <button class="opt">The ship's bell, struck at anchor</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>3. "Athwart" is the living root of which modern word?</p>
+      <button class="opt">Toward</button>
+      <button class="opt">Awkward</button>
+      <button class="opt">Award</button>
+      <button class="opt">Thwart — to lie across a plan's path and stop it</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>4. Why did sailors dread lying athwart-hawse?</p>
+      <button class="opt">It was unlucky to face west at anchor</button>
+      <button class="opt">Swinging ships could collide, and their cables foul into a day-long tangle</button>
+      <button class="opt">Crossed cables attracted lightning</button>
+      <button class="opt">It voided the ship's insurance on the spot</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="athwarthawse-surreal.jpg" alt="Two wooden sailing ships at anchor in a foggy moonlit harbor, lying crossed at their bows, athwart each other; their anchor chains hang between the bows tied in one perfect knot no crew tied, a gull standing on the knot">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: two great wooden sailing ships at anchor in a foggy, moonlit harbor, lying crossed at their bows, athwart each other, lanterns glowing on wet wood. One quiet impossibility: their heavy anchor chains rise out of the black water between the bows and hang in the air tied in one perfect, deliberate knot that no crew tied — and a single gull sleeps standing on the knot. Deep teal night palette, cinematic, soft film grain, no readable text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> list · athwart-hawse, the crossed cables<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('athwart-hawse');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — bows crossed, cables crossed. A predicament, not a maneuver.",
+     "Not quite — athwart-hawse is a position at anchor: one ship lying across another's bow, cables crossed."],
+    ["Correct — the hawse is the ship's 'neck,' pierced by the hawse pipes the cables run through.",
+     "Not quite — the hawse is at the bow: the section where the anchor cables pass through the hawse pipes."],
+    ["Correct — to thwart is to lie athwart: across the path, in the way.",
+     "Not quite — the heir is 'thwart.' Athwart, 'across,' is its root."],
+    ["Correct — swinging hulls, grinding cables, and a foul hawse to clear in the dark. The anchorage's worst chore.",
+     "Not quite — the dread was practical: collision as the ships swung, and cables fouled into a tangle that took hours to clear."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — clear hawse. You'd berth well in any roadstead." :
+          score === 3 ? "3 / 4 — one cable crossed. The night watch forgives you." :
+          "0–2 / 4 — somewhere two captains are blaming you for the tangle.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
