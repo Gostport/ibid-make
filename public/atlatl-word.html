@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- atlatl-word v1.0 — Oct 26, 2026 (Blossom Night 12) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATLATL — The Arm, Lengthened</title>
+<style>
+  :root{
+    --ink:#0d1020;
+    --ink2:#161a30;
+    --parchment:#e6ddc3;
+    --parchment-dim:#a8a07e;
+    --gold:#d9a441;
+    --star:#9aa7c7;
+    --ash:#8f9a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #232847 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #2c3252;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfc2a2}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #2c3252;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101325;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#1d2138}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #2c3252;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#101325;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c2b493}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101325;border:1px solid #2c3252;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#141824}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#cfc2a2}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#d8cba4;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101325;border:1px solid #2c3252;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#121f14}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0b0e1c;border:1px dashed #57432a;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfc2a2;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #2c3252}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">ATLATL</h1>
+    <div class="phonetic">/ˈæt.læt.əl/ &nbsp;·&nbsp; at-LAT-uhl &nbsp;·&nbsp; noun · Nahuatl: "spear-thrower"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="atlatl-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Atlatl</strong> — a grooved wooden board with a hook at one end, used to throw a dart: the dart's butt rests against the hook, and swinging the board lengthens the thrower's arm, so the dart flies far faster and farther than a hand-thrown spear.</p>
+    <p class="plain">Say it in its own rhythm — a stutter and a catch: <b>at-LAT-uhl</b>. The atlatl is not the weapon that hits the target; it's the weapon that <i>throws</i> the weapon. A lever, roughly two feet of carved wood, that gives the human arm one extra joint it was never issued. Tonight it came off a Blossom board whose pangram was <i>mantled</i> — atlatl is built from nothing but those letters' kin: A, T, L, and the board's own set.</p>
+    <p class="hint">From Nahuatl <i>ahtlatl</i>, "spear-thrower" — the Aztec name became the world's word for the whole family of throwing boards.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>A doubled syllable and a sound English has to cheat at — tap each:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">ahtlatl</div>
+        <div class="gloss"><b>The original.</b> — In Classical Nahuatl the word is <i>ahtlatl</i>. Spanish scribes wrote down what they heard, English borrowed the spelling, and the word travelled further than most of the darts it threw.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-tl</div>
+        <div class="gloss"><b>One sound, two letters.</b> — The ending <i>tl</i> is a single Nahuatl consonant, made with the tongue against the teeth and a puff of air out the side. English mouths can't hold it, so we sneak in a vowel and say "-tuhl" — which is why a six-letter word takes three syllables.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">at · latl</div>
+        <div class="gloss"><b>The word throws twice.</b> — Read it aloud: the same beat lands twice, <i>at-lat</i>, like a throw and its echo. It belongs with this collection's other doubled words — khuskhus, tangantangan — words built out of repetition.</div>
+      </div>
+    </div>
+    <p class="hint">A word that stutters on purpose, for a stick that swings twice as long as an arm.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>Three facts that have to be held together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Lever</h3>
+        <p>The board is an extra joint. Arm plus atlatl swings through a longer arc than arm alone, and the dart leaves the hook with the speed that longer arc buys. Simple machine, Stone Age patent.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Dart</h3>
+        <p>An atlatl throws <i>darts</i>, not spears — long, light, feathered shafts that flex as they leave. The thrower stays in the hand; only the dart goes. You reload the stick, not the throw.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Age</h3>
+        <p>Spear-throwers are among humanity's oldest weapons — known across Europe, Asia, Australia (the woomera) and the Americas for tens of thousands of years, long before the bow reached most of them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Long Arm</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">Deep Past</button>
+      <button class="tl-btn" data-era="1">The Aztecs</button>
+      <button class="tl-btn" data-era="2">1519</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">Deep Past</span> — Everyone Invents the Lever</h3>
+      <p>Carved spear-throwers survive from Ice Age Europe, some decorated with mammoths and reindeer. Aboriginal Australia kept its own version, the woomera. Wherever people hunted big animals with light arms, somebody eventually had the idea: make the arm longer.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Aztecs</span> — Ahtlatl</h3>
+      <p>In the Aztec world the ahtlatl was both war weapon and hunting tool — soldiers carried it into battle, and hunters used it to strike waterfowl on the lakes around Tenochtitlan. The finest were carved, gilded, and carried as marks of rank.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1519</span> — The Conquistadors Notice</h3>
+      <p>Spanish chroniclers recorded the atlatl with respect: in practiced hands its darts were reported to strike hard enough to trouble armor. Gunpowder won the century, but the throwing board had held its own against steel.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — A Living Sport</h3>
+      <p>The atlatl never quite died. Enthusiasts organised around the World Atlatl Association throw for distance and accuracy, hunters in some places may legally take game with one, and a carved stick from the Ice Age still out-throws the bare human arm.</p>
+    </div>
+    <div class="rule">
+      A lever with a memory: the arm, lengthened by two feet — and twenty thousand years.
+      <cite>— the atlatl, in one line</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="2">
+      <p>1. An atlatl is…</p>
+      <button class="opt">A small bow used from horseback</button>
+      <button class="opt">A type of spear with a stone point</button>
+      <button class="opt">A hooked board that throws a dart, lengthening the thrower's arm</button>
+      <button class="opt">A woven shield carried by Aztec soldiers</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. The word atlatl comes from…</p>
+      <button class="opt">Nahuatl ahtlatl, "spear-thrower"</button>
+      <button class="opt">Greek, "to hurl"</button>
+      <button class="opt">Latin, "arm-extender"</button>
+      <button class="opt">Spanish, "little atlas"</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>3. The quiet trick of the atlatl is…</p>
+      <button class="opt">It poisons the dart</button>
+      <button class="opt">It makes the throw silent</button>
+      <button class="opt">It lets one hunter throw two darts at once</button>
+      <button class="opt">It works as a lever — an extra joint that lengthens the throwing arm</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>4. Which is true of spear-throwers?</p>
+      <button class="opt">The Aztecs invented them in the 1400s</button>
+      <button class="opt">They are tens of thousands of years old and were used around the world</button>
+      <button class="opt">They were only ever used for ceremony</button>
+      <button class="opt">They throw spears, never darts</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="atlatl-surreal.jpg" alt="A Mesoamerican hunter on a reed-covered lakeshore at dawn holding a carved wooden atlatl spear-thrower, the launched dart hanging motionless in mid-air while its landing ripple already spreads across the lake">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: an ancient Mesoamerican hunter on a reed-covered lakeshore at dawn, holding an atlatl, a carved wooden spear-thrower, at the top of his throw, a long flexible dart launched from its hook. One quiet impossibility: the dart hangs perfectly motionless in the air a hand's breadth beyond the atlatl's hook, frozen mid-flight, while mist drifts, reeds sway, and its landing ripple already spreads across the lake it has not yet reached. Golden dawn light, mist over still water, cinematic, soft film grain, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> board · pangram: mantled · atlatl, the arm lengthened<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('atlatl');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — the board is the thrower. The dart does the flying; the atlatl does the leverage.",
+     "Not quite — an atlatl is the hooked board that throws the dart. It lengthens the arm."],
+    ["Correct — Nahuatl ahtlatl. The Aztec name became the world's word for the device.",
+     "Not quite — it's from Nahuatl ahtlatl, 'spear-thrower.'"],
+    ["Correct — one extra joint, a longer arc, a faster dart. The oldest simple machine in the hunt.",
+     "Not quite — the trick is leverage: the board acts as an extra joint in the arm."],
+    ["Correct — Ice Age Europe to Aboriginal Australia to the Aztecs. Everyone invents the lever.",
+     "Not quite — spear-throwers are tens of thousands of years old and worldwide, far older than the Aztecs."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — clean throw. The dart lands where you aimed it." :
+          score === 3 ? "3 / 4 — one dart went wide. The lake forgives." :
+          "0–2 / 4 — somewhere an Aztec hunting instructor is shaking his head.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
