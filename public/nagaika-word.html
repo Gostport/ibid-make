@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!-- nagaika-word v1.0 — Nov 3, 2026 (Blossom Night 14) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAGAIKA — The Nogai's Whip</title>
+<style>
+  :root{
+    --ink:#14100a;
+    --ink2:#1e1810;
+    --parchment:#e8dcc0;
+    --parchment-dim:#ab9c78;
+    --gold:#d9a441;
+    --star:#9aa7c7;
+    --ash:#a08b62;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #3a2a14 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #453218;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#d3c5a4}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #453218;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#171208;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#2a2010}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #453218;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#171208;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c6b795}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#171208;border:1px solid #453218;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#1c1408}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#d3c5a4}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#dccda6;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#171208;border:1px solid #453218;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#141f12}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0f0b06;border:1px dashed #6b5326;border-radius:8px;
+    padding:20px;font-size:15px;color:#d3c5a4;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #453218}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">NAGAIKA</h1>
+    <div class="phonetic">/nəˈɡaɪ.kə/ &nbsp;·&nbsp; nah-GY-kah &nbsp;·&nbsp; noun · Russian нага́йка: "the Nogai's whip"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="nagaika-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Nagaika</strong> — a short, thick whip of braided rawhide, round in cross-section, with a short wooden handle and a wrist loop. Standard kit of the Cossack horseman, borrowed wholesale from the Nogai Tatars of the steppe: built to urge a horse, heavy enough at the tip to fight off a wolf, and eventually infamous as the Tsar's crowd-control baton.</p>
+    <p class="plain">Stress the middle syllable — <b>nah-GY-kah</b>. Seven letters, three of them A, and the whole word looks braided itself, all crossings and curves. It also answers to <i>kamcha</i>, from the Turkic <i>kamci</i>, plain "whip" — but nagaika is the better name, because it has a people inside it.</p>
+    <p class="hint">From Russian <i>nagayka</i>, from the Nogai, the Turkic nomads of the steppe north of the Caucasus. Its first form was <i>nogaika</i> — literally "the Nogai's."</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>A borrowed word with the borrow still visible — tap each part:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">NOGA- → NAGA-</div>
+        <div class="gloss"><b>The people inside the word.</b> — The Nogai were nomad horsemen of the steppe. The Cossacks settling the same frontier took the whip, the braiding technique, and the name in one motion: <i>nogaika</i>, "the Nogai's (whip)." The vowels shifted as the word Russified; the debt stayed legible.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-KA</div>
+        <div class="gloss"><b>The handle the language gives it.</b> — Russian <i>-ka</i> ends thousands of everyday nouns. Stuck on a people's name, it naturalizes the foreign tool into kit — the linguistic equivalent of the wrist loop: now it belongs on your hand, in your boot-top, in your language.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">NAGA, hidden</div>
+        <div class="gloss"><b>The snake that isn't there.</b> — Read the first four letters: NAGA, Sanskrit for "serpent." One folk etymology claims the whip is named for a snake because the braiding looks like scales. Almost certainly false — see also the claim from <i>noga</i>, Russian for "leg," because it rode tucked into a boot-top. Both stories are too good to die, and tonight's render took the snake's side.</div>
+      </div>
+    </div>
+    <p class="hint">A word with a false snake in its first four letters and a true people in its first three.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>One tool, three careers — hold them together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Horse Tool</h3>
+        <p>Rawhide strips braided tight around a core, tapering to a knot or a cracker. Its everyday job for centuries was the simplest one on the steppe: a flick, and the horse moves. It rode looped at the wrist or tucked into a boot-top, always within reach.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Wolf-Killer</h3>
+        <p>Some nagaikas were worked with metal in the tip — weighted to strike, not just sting. Vladimir Dahl's great dictionary of Russian, in the 1860s, records that fighting version under its own name: <i>volchoboy</i> (волкобой) — "wolf-killer."</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Baton</h3>
+        <p>Regulation issue for Cossack troops in the Imperial army, and a badge of rank for senior Cossacks. Then, in 1905 and after, mounted Cossacks turned it on crowds — and the whip became a byword for Tsarist repression, its third career, and the one that stained the name.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Borrowed Whip</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">The Steppe</button>
+      <button class="tl-btn" data-era="1">The 1860s</button>
+      <button class="tl-btn" data-era="2">1905</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">The Steppe</span> — Before It Was Russian</h3>
+      <p>Nogai horsemen ride the grass sea north of the Caucasus with short braided whips. Cossacks settling the same frontier adopt the tool wholesale — braid, handle, wrist loop, and word. Technologies on the steppe belonged to whoever could stay on a horse; this one kept its makers' name anyway.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The 1860s</span> — Dahl Writes It Down</h3>
+      <p>Vladimir Dahl's Explanatory Dictionary records the nagaika in detail — and its weighted, wolf-fighting form under a separate name, <i>volchoboy</i>. A thing gets a dictionary entry of its own, plus a variant with its own entry, when it is everywhere. By then the whip was standard Cossack issue across the empire.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1905</span> — The Symbol Turns</h3>
+      <p>Revolution year. Cossack units disperse demonstrations with nagaikas, and the whip passes into political cartoons, protest songs, and foreign headlines as shorthand for the regime's fist. A horse tool becomes the most hated silhouette in Russia — recognizable at a hundred paces, in a single curved line.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Heritage and Argument</h3>
+      <p>The nagaika survives as folk craft and ceremonial dress for Cossack revival groups, sold in markets from the Don to the Caucasus — and it still starts an argument whenever it appears at a modern protest in a patrolman's hand. Few tools carry their whole history this visibly: horse, wolf, crowd.</p>
+    </div>
+    <div class="rule">
+      Borrowed from the Nogai, named like kit, promoted three times — horse, wolf, crowd — and never quite demoted back.
+      <cite>— nagaika, in one line</cite>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A nagaika is…</p>
+      <button class="opt">A long bullwhip for driving cattle</button>
+      <button class="opt">A short, thick braided-leather whip</button>
+      <button class="opt">A curved sabre worn by Cossack officers</button>
+      <button class="opt">A Mongolian horsehair fiddle</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>2. The name nagaika comes from…</p>
+      <button class="opt">The Sanskrit word for snake</button>
+      <button class="opt">The Russian word for leg</button>
+      <button class="opt">A Siberian river</button>
+      <button class="opt">The Nogai people — it began as "nogaika," the Nogai's whip</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. A weighted, metal-tipped nagaika for fighting wolves was called…</p>
+      <button class="opt">Volchoboy — the wolf-killer</button>
+      <button class="opt">Kamcha</button>
+      <button class="opt">A knout</button>
+      <button class="opt">A shashka</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>4. Its everyday job, first and longest, was…</p>
+      <button class="opt">Signaling across the steppe</button>
+      <button class="opt">Serving purely as a badge of rank</button>
+      <button class="opt">Urging a horse forward</button>
+      <button class="opt">Herding sheep</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="nagaika-surreal.jpg" alt="A golden steppe at dusk: a braided leather nagaika standing upright in the feather grass entirely on its own, coiled at the base and raised like a charmed cobra, facing a lone grey wolf in the distance">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: an empty Eurasian steppe at dusk, tall golden feather grass under a wide amber sky. In the middle of the grass stands a single Cossack nagaika — a short, thick whip of dark braided leather with a short wooden handle and a wrist loop — standing upright entirely on its own, its lower half coiled on the ground like a snake's body and its upper half raised and swaying like a charmed cobra, its braided surface catching the low light like scales. It faces a lone grey wolf standing motionless at a wary distance near the horizon. One quiet impossibility: no hand holds the whip and no one is there — it stands and sways by itself, keeping the wolf at bay. Low warm dusk light, long shadows, cinematic composition, soft film grain, no people, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> board · nagaika, the Nogai's whip<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('nagaika');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — short, thick, round in cross-section: braided rawhide, wooden handle, wrist loop.",
+     "Not quite — think shorter and thicker: a braided rawhide whip, not a sabre or a fiddle."],
+    ["Correct — named for the Nogai Tatars, whose whip it was before it was the Cossacks'.",
+     "Not quite — the snake and the leg are folk etymologies. The name belongs to the Nogai people."],
+    ["Correct — volchoboy, 'wolf-killer,' recorded in Dahl's dictionary in the 1860s. Kamcha is the whip's other everyday name; a shashka is a sabre.",
+     "Not quite — volchoboy, the wolf-killer. Kamcha is the nagaika's other everyday name, and a shashka is a sabre."],
+    ["Correct — a riding whip first. The wolf-fighting and the crowd work were later promotions.",
+     "Not quite — first and longest, it was a working riding whip: urge the horse. The rest came later."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — the steppe approves. Even the wolf is keeping its distance." :
+          score === 3 ? "3 / 4 — one braid loose. The coil forgives." :
+          "0–2 / 4 — somewhere on the steppe, a whip just uncoiled itself in judgment.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
