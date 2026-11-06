@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!-- disseisee-word v1.0 — Nov 5, 2026 (Blossom Night 15) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISSEISEE — The One Put Out</title>
+<style>
+  :root{
+    --ink:#101208;
+    --ink2:#181a10;
+    --parchment:#e6ddc4;
+    --parchment-dim:#aaa184;
+    --gold:#c9a24d;
+    --star:#7a8b5a;
+    --ash:#8b8464;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #262a14 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(201,162,77,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #3a3d22;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#d3cba9}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #3a3d22;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#12140a;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#23250f}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #3a3d22;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#12140a;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c6bd97}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#12140a;border:1px solid #3a3d22;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#1c1a08}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#d3cba9}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#dcd2a8;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#12140a;border:1px solid #3a3d22;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#141f12}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0b0c05;border:1px dashed #6b6a35;border-radius:8px;
+    padding:20px;font-size:15px;color:#d3cba9;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #3a3d22}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">DISSEISEE</h1>
+    <div class="phonetic">/dɪˈsiː.ziː/ &nbsp;·&nbsp; dis-SEE-zee &nbsp;·&nbsp; noun · Law French: "the one put out"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="disseisee-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Disseisee</strong> — in medieval English land law, the person who has been wrongfully dispossessed of a freehold estate: put out of their <i>seisin</i> — their legal possession of the land — by force, threat, or trickery, with no judgment and no process. The one on the receiving end of a disseisin; the plaintiff in the assize of novel disseisin.</p>
+    <p class="plain">Stress the middle — <b>dis-SEE-zee</b>. Nine letters, and the S's outnumber everything: three S's, three E's, two I's, one D standing at the gate. English law usually names the doer of a thing. This word names the person it was done <i>to</i> — the tenant standing outside his own barred door, deed in hand, watching somebody else sit in his chair.</p>
+    <p class="hint">From Anglo-Norman <i>disseisir</i>, to dispossess: <i>dis-</i>, apart and undone, + <i>seisir</i>, to put in possession — plus the suffix <i>-ee</i>, the done-to ending. Also spelled <i>disseizee</i>.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>A whole eviction in three pieces — tap each part:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">DIS-</div>
+        <div class="gloss"><b>The undoing.</b> — The Latin prefix of reversal: apart, away, un-. Bolted onto the front of a verb of holding, it makes the verb run backwards. Everything in this word after the prefix is possession; the prefix is the possession being taken away.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">SEIS-</div>
+        <div class="gloss"><b>The holding.</b> — From Old French <i>seisir</i>, to seize, to put in possession. <i>Seisin</i> was the great fact of medieval land law: not ownership on paper but possession in fact, held of a freehold estate. To be <i>seised</i> was to be in; the seisin is the thing the disseisee lost.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-EE</div>
+        <div class="gloss"><b>The done-to ending.</b> — The suffix English borrowed from French law for the person on the receiving end of an act: <i>lessee, grantee, feoffee, donee</i>. The <i>-or</i> does (disseisor); the <i>-ee</i> suffers. The word is grammatically built as a victim: undo + holding + the one it happened to.</div>
+      </div>
+    </div>
+    <p class="hint">Dis- unmakes it, seis- names it, -ee stands outside it: the whole grammar of being put out.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>One wrong, one remedy, one pair of words — hold them together:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Wrong</h3>
+        <p>Disseisin: an ouster of the freehold. The disseisor came with force, or threats, or a trick — changed the lock, barred the door, moved in while you were at market — and you were out. No court, no writ, no judgment. Blackstone would later file it among the injuries to real property: the wrongful putting-out of the one seised of the freehold.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Remedy</h3>
+        <p>Henry II's answer, from 1166: the assize of <i>novel disseisin</i> — "recent dispossession." Twelve neighbors were sworn to answer one question: was this person disseised? If yes, the disseisee was put back <i>first</i>, and the arguments about who truly owned the land could happen later. Possession first, title second.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Pair</h3>
+        <p>The law named both parties and sided, procedurally, with the loser of the scuffle: the <i>disseisor</i> held the land but not the law's sympathy; the <i>disseisee</i> held only a claim — and the fastest, cheapest remedy in the medieval world. For centuries, being the -ee beat being the -or.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of the One Put Out</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">1166</button>
+      <button class="tl-btn" data-era="1">The 1200s</button>
+      <button class="tl-btn" data-era="2">The 1760s</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">1166</span> — Henry II Invents the Fast Lane</h3>
+      <p>The Assize of Clarendon gives every freeholder in England a royal remedy for fresh dispossession. Before it, a disseisee's options were a duel of writs that could outlive him, or taking the land back the same way he lost it. After it: a writ, a jury of neighbors, one question, and the sheriff put him back in. The disseisee becomes the best-protected plaintiff in the kingdom.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The 1200s</span> — Seisin Becomes a Science</h3>
+      <p>The treatises of Glanvill and Bracton build a whole jurisprudence on seisin — who has it, how it passes, how it is lost. The assize of novel disseisin becomes the workhorse of the royal courts, and with it a principle England keeps to this day: the law protects possession itself, even before it decides ownership. Every disseisee in the realm has a road back that runs through the king's court, not the lord's.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The 1760s</span> — Blackstone Files It</h3>
+      <p>Blackstone's Commentaries set disseisin in its permanent place in the architecture of the law: an injury to real property, the wrongful putting-out of the one seised of the freehold. By then the old assize itself is fading — the action of ejectment does its work faster — but the word pair, disseisor and disseisee, is fixed in the books for good.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — A Fossil With Grandchildren</h3>
+      <p>Nobody files an assize of novel disseisin anymore, and <i>disseisee</i> survives in law dictionaries and property casebooks — a fossil word. But its logic runs modern landlord-tenant law: the landlord who changes the locks without a court order has committed the disseisor's wrong, and the tenant put out on the pavement is the disseisee's direct descendant, with the same fast road back.</p>
+    </div>
+    <div class="rule">
+      The law asked one question first — not "whose is it?" but "who was put out?" — and gave the land back before it argued.
+      <cite>— the assize of novel disseisin, 1166, in one line</cite>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="2">
+      <p>1. A disseisee is…</p>
+      <button class="opt">The official who seizes land for the Crown</button>
+      <button class="opt">The lawyer who argues a land case</button>
+      <button class="opt">The person wrongfully dispossessed of their land</button>
+      <button class="opt">The heir who inherits an estate</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>2. "Seisin" meant…</p>
+      <button class="opt">Legal possession of a freehold estate</button>
+      <button class="opt">The tax owed on inherited land</button>
+      <button class="opt">A knight's oath of service</button>
+      <button class="opt">The boundary stones of a manor</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>3. The disseisee's great remedy, from 1166, was…</p>
+      <button class="opt">Trial by combat</button>
+      <button class="opt">A papal decree</button>
+      <button class="opt">Purchasing a royal pardon</button>
+      <button class="opt">The assize of novel disseisin — a fast jury action that put him back first</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="1">
+      <p>4. The wrongful taker — the other half of the pair — was the…</p>
+      <button class="opt">Reeve</button>
+      <button class="opt">Disseisor</button>
+      <button class="opt">Escheator</button>
+      <button class="opt">Franklin</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="disseisee-surreal.jpg" alt="A medieval tenant in rough wool standing at dawn outside his barred stone-and-thatch cottage, a sealed parchment deed in his hands, breath fogging; inside the firelit room, otherwise empty, his own shadow sits at the table in his place like a dark second self, a bowl before it">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: a medieval English lane at cold dawn. A small stone-and-timber cottage with a thatched roof; its heavy wooden door is barred from the inside. Outside stands a lone tenant farmer in rough brown wool clothes, holding a parchment deed, his breath fogging, looking through the cottage's small window. Inside, warm hearth-glow lights an empty room — no one is there — but the man's own shadow sits at the table in his usual place, cast long and sharp across the floorboards, a bowl and spoon before it, as if it never left. One quiet impossibility: the man has been put out of his house, but his shadow has not — it still lives there without him. Cold blue-grey dawn outside, warm amber firelight inside, cinematic composition, soft film grain, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> board · disseisee, the one put out<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('disseisee');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — the disseisee is the one it was done to: dispossessed of a freehold without judgment or process.",
+     "Not quite — the disseisee holds no office and argues no case. He is the person wrongfully put out of his land."],
+    ["Correct — seisin was possession in law: to be seised of the freehold was to be in, and it was the thing worth suing over.",
+     "Not quite — seisin is possession itself, the legal holding of a freehold estate. The stones and the taxes come later."],
+    ["Correct — novel disseisin, 'recent dispossession': twelve neighbors, one question, and the disseisee went back in first.",
+     "Not quite — no combat, no pope, no pardon for sale. Henry II's assize of novel disseisin did it with a jury of neighbors."],
+    ["Correct — disseisor does, disseisee suffers: -or and -ee, the pair the old law named for every wrongful ouster.",
+     "Not quite — the taker is the disseisor. A reeve manages, an escheator collects, a franklin just holds land — none of them did the putting-out."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — seised of the subject. The neighbors would swear to it." :
+          score === 3 ? "3 / 4 — one fact still outside the door. Nearly back in." :
+          "0–2 / 4 — disseised of the details. The assize will restore you on a re-read.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
