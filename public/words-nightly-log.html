@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Nightly Log — Blossom Words</title>
+<style>
+  :root{
+    --ink:#100d18;
+    --ink2:#171223;
+    --parchment:#d8c9a8;
+    --parchment-dim:#9c8f74;
+    --gold:#c9a24d;
+    --fog:#8f8a9c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #221a38 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px 80px}
+  header{text-align:center;padding:64px 0 8px}
+  .kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--fog);margin-bottom:18px}
+  h1{font-size:clamp(36px,7vw,64px);font-weight:400;letter-spacing:6px;text-shadow:0 0 40px rgba(201,162,77,.3)}
+  .sub{color:var(--fog);font-style:italic;margin-top:10px}
+  .entry{
+    display:flex;gap:24px;align-items:flex-start;
+    background:var(--ink2);border:1px solid #33294a;border-radius:10px;
+    padding:24px;margin-top:28px;position:relative;text-decoration:none;color:inherit;
+    transition:border-color .2s;
+  }
+  .entry:hover{border-color:var(--gold)}
+  .entry::before{
+    content:"";position:absolute;top:0;left:24px;right:24px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  .thumb{flex:0 0 220px}
+  .thumb img{width:100%;border-radius:8px;border:1px solid #33294a;display:block}
+  .meta{flex:1;min-width:0}
+  .date{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--fog)}
+  .word{font-size:34px;letter-spacing:5px;color:var(--parchment);margin:6px 0 4px}
+  .phon{font-style:italic;color:var(--parchment-dim);font-size:15px}
+  .line{margin-top:10px;font-size:16px;color:#cfc2a2}
+  .go{margin-top:12px;font-size:13px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+  @media (max-width:640px){
+    .entry{flex-direction:column}
+    .thumb{flex:none;width:100%}
+  }
+  footer{text-align:center;margin-top:60px;color:var(--fog);font-size:13px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">A nightly log</div>
+    <h1>BLOSSOM WORDS</h1>
+    <p class="sub">One good word a night, grown from the Blossom board.<br>The funny-looking ones are always load-bearing.</p>
+  </header>
+
+  <a class="entry" href="loligo-word.html">
+    <div class="thumb"><img src="loligo-surreal.jpg" alt="A long amber-red loligo squid floating motionless in dawn air above a calm, misty sea, fins rippling, tentacles trailing; below, an old fisherman in a small wooden rowboat baits a hook without looking up"></div>
+    <div class="meta">
+      <div class="date">November 9, 2026</div>
+      <div class="word">LOLIGO</div>
+      <div class="phon">/loʊˈlaɪɡoʊ/ · lo-LYE-go · noun · Latin: "squid"</div>
+      <p class="line">Pure Latin, unchanged since Pliny wrote it down in 77 AD — the Romans' word for the slender inshore squid, flying leaps and all. Lamarck made it a genus in 1798, and its giant axon later taught Hodgkin and Huxley how every nerve fires. In the render it swims the dawn sky over a calm sea, exactly as if the air were water — and the fisherman below doesn't even look up.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="disseisee-word.html">
+    <div class="thumb"><img src="disseisee-surreal.jpg" alt="A medieval tenant in rough wool standing at dawn outside his barred stone-and-thatch cottage, a sealed parchment deed in his hands, breath fogging; inside the firelit room, otherwise empty, his own shadow sits at the table in his place like a dark second self, a bowl before it"></div>
+    <div class="meta">
+      <div class="date">November 5, 2026</div>
+      <div class="word">DISSEISEE</div>
+      <div class="phon">/dɪˈsiː.ziː/ · dis-SEE-zee · noun · Law French: "the one put out"</div>
+      <p class="line">Anglo-Norman law French, built like a tiny eviction: <i>dis-</i> (the undoing) + <i>seisir</i> (to put in possession) + <i>-ee</i> (the one it's done to) — the person wrongfully put out of a freehold, and the plaintiff of Henry II's assize of novel disseisin (1166), medieval law's fastest remedy: twelve neighbors said he'd been put out, and he was put back in before anyone argued title. In the render he stands locked out at dawn, deed in hand — but his shadow is still seated at his own table.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="nagaika-word.html">
+    <div class="thumb"><img src="nagaika-surreal.jpg" alt="A golden steppe at dusk: a braided leather nagaika standing upright in the feather grass entirely on its own, coiled at the base and raised like a charmed cobra, facing a lone grey wolf in the distance"></div>
+    <div class="meta">
+      <div class="date">November 3, 2026</div>
+      <div class="word">NAGAIKA</div>
+      <div class="phon">/nəˈɡaɪ.kə/ · nah-GY-kah · noun · Russian: "the Nogai's whip"</div>
+      <p class="line">Russian <i>nagayka</i>, from the Nogai Tatars — originally <i>nogaika</i>, "the Nogai's": a short, thick braided-rawhide whip that was the Cossack's horse tool, a weighted wolf-killer (Dahl's <i>volchoboy</i>), and later the Tsar's crowd baton. In the render, unheld on the empty steppe, it rises coiled like a charmed snake and faces down the wolf alone.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="deinodon-word.html">
+    <div class="thumb"><img src="deinodon-surreal.jpg" alt="A dark museum gallery at night: one enormous fossil tyrannosaur tooth in a glass display case under a spotlight, an empty brass nameplate beneath it, and on the wall behind the case the tooth's shadow is the complete silhouette of a towering tyrannosaur"></div>
+    <div class="meta">
+      <div class="date">November 1, 2026</div>
+      <div class="word">DEINODON</div>
+      <div class="phon">/ˈdaɪ.nə.dɒn/ · DY-nuh-don · noun · Greek: "terrible tooth"</div>
+      <p class="line">Greek <i>deinos</i> (terrible) + <i>odōn</i> (tooth) — a dinosaur Joseph Leidy named in 1856 from teeth alone; no animal was ever found to go with them, and the name stands today as a <i>nomen dubium</i>. Tonight's board also held its cousin <i>diodon</i>. In the render, the lone tooth casts the whole tyrannosaur's shadow.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="atlatl-word.html">
+    <div class="thumb"><img src="atlatl-surreal.jpg" alt="A Mesoamerican hunter on a reed-covered lakeshore at dawn holding a carved wooden atlatl spear-thrower, the launched dart hanging motionless in mid-air while its landing ripple already spreads across the lake"></div>
+    <div class="meta">
+      <div class="date">October 26, 2026</div>
+      <div class="word">ATLATL</div>
+      <div class="phon">/ˈæt.læt.əl/ · at-LAT-uhl · noun · Nahuatl: "spear-thrower"</div>
+      <p class="line">Nahuatl <i>ahtlatl</i> — a hooked throwing board that lengthens the arm into a lever and launches a dart; tonight's pick from a board whose pangram was <i>mantled</i>, built from the board's own letters: A, T, L. The dart hangs still in the air; its landing ripple has already spread.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="athwarthawse-word.html">
+    <div class="thumb"><img src="athwarthawse-surreal.jpg" alt="Two wooden sailing ships at anchor in a foggy moonlit harbor, lying crossed at their bows, athwart each other; their anchor chains hang between the bows tied in one perfect knot no crew tied, a gull standing on the knot"></div>
+    <div class="meta">
+      <div class="date">October 25, 2026</div>
+      <div class="word">ATHWART-HAWSE</div>
+      <div class="phon">/əˈθwɔːrt hɔːz/ · uh-THWORT-hawz · nautical · "across the bow"</div>
+      <p class="line"><i>Athwart</i>, across; <i>hawse</i>, the bow where the anchor cables run — from Old Norse <i>háls</i>, "neck." A ship lying across another's bow, cables crossed: two ships can share a harbor; they cannot share a hawse.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="inveigle-word.html">
+    <div class="thumb"><img src="inveigle-surreal.jpg" alt="A fox in a burgundy waistcoat at a candlelit night market, his compliments curling through the air as ribbons of glowing golden script that wind into a blindfold over the eyes of the smiling traveler he leads by the hand"></div>
+    <div class="meta">
+      <div class="date">October 23, 2026</div>
+      <div class="word">INVEIGLE</div>
+      <div class="phon">/ɪnˈveɪɡəl/ · in-VAY-gul · verb · French, at root: "to blind"</div>
+      <p class="line">Old French <i>aveugler</i>, "to blind" — to persuade by deception or flattery until the mark walks in smiling, convinced it was his own idea. First the eyes, then the feet.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="khuskhus-word.html">
+    <div class="thumb"><img src="khuskhus-surreal.jpg" alt="A scarlet poppy in full bloom growing out of a burlap sack of white poppy seeds at a spice bazaar, vetiver root bundles hanging above"></div>
+    <div class="meta">
+      <div class="date">October 21, 2026</div>
+      <div class="word">KHUSKHUS</div>
+      <div class="phon">/ˈkʌskʌs/ · KUS-kus · noun · Hindi, from Persian</div>
+      <p class="line">Persian <i>khashkhash</i> ("poppy") via Hindi — one doubled word for two things: white poppy seeds ground into curry pastes, and the fragrant vetiver root woven into cooling doorway mats. Only sounds like couscous; they're strangers.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="sosie-word.html">
+    <div class="thumb"><img src="sosie-surreal.jpg" alt="A man at a Paris café table across from his exact double — identical face, identical coat — with only one shadow on the floor between them"></div>
+    <div class="meta">
+      <div class="date">October 20, 2026</div>
+      <div class="word">SOSIE</div>
+      <div class="phon">/ˈsoʊzi/ · SOH-zee · noun · French</div>
+      <p class="line">French <i>sosie</i>, from Latin <i>Sosia</i> — a person's exact double. Named for the slave in Plautus's <i>Amphitruo</i> whose face Mercury stole — then beat him and sent him home doubting his own name.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="mysticete-word.html">
+    <div class="thumb"><img src="mysticete-surreal.jpg" alt="A colossal baleen whale surfacing at dusk, a single tiny field mouse standing calmly on its snout"></div>
+    <div class="meta">
+      <div class="date">October 17, 2026</div>
+      <div class="word">MYSTICETE</div>
+      <div class="phon">/ˈmɪstɪˌsiːt/ · MISS-tih-seet · noun · zoology</div>
+      <p class="line">New Latin <i>mysticētus</i>, from Greek <i>mustikētos</i> — a copyist's error for <i>ho mūs to kētos</i>, "the mouse, the whale." A baleen whale, named by a 2,000-year-old typo. The mustache name (<i>Mystacoceti</i>) lost; the typo won. Tonight's unfound pangram.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="ngwee-word.html">
+    <div class="thumb"><img src="ngwee-surreal.jpg" alt="A cracked bronze coin standing in red dust, its center glowing with its own daylight"></div>
+    <div class="meta">
+      <div class="date">October 16, 2026</div>
+      <div class="word">NGWEE</div>
+      <div class="phon">/əŋˈɡweɪ/ · ung-GWAY · noun · Zambian</div>
+      <p class="line">Bemba/Chichewa <i>ngwee</i> ("bright, shining") — a Zambian monetary unit, one hundredth of a kwacha. Named for Zambia's bright future after independence in 1964; introduced in 1968.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="eterne-word.html">
+    <div class="thumb"><img src="eterne-surreal.jpg" alt="A colossal brass hourglass on a desert plain under a starfield, its sand pouring down while the lower bulb stays nearly empty"></div>
+    <div class="meta">
+      <div class="date">October 15, 2026</div>
+      <div class="word">ETERNE</div>
+      <div class="phon">/ih-TURN/ · ih-TURN · adjective · archaic</div>
+      <p class="line">Middle English, from Middle French, from Latin <i>aeternus</i> (from <i>aevum</i>, "age") — eternal, everlasting. Shakespeare forged Mars's armour "for proof eterne" in <i>Hamlet</i>; the word retired and left "eternal" to do the work.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="tangantangan-word.html">
+    <div class="thumb"><img src="tangantangan-surreal.jpg" alt="A tall castor oil plant with palmate hand-like leaves and spiky red seed pods on a garden path at dusk, its leaves casting hand-shaped shadows on the path"></div>
+    <div class="meta">
+      <div class="date">October 14, 2026</div>
+      <div class="word">TANGANTANGAN</div>
+      <div class="phon">/tahng-ahn-tahng-ahn/ · tahng-ahn-tahng-ahn · noun · Tagalog</div>
+      <p class="line">Tagalog <i>tangan</i> ("hand") + reduplication — the castor oil plant, <i>Ricinus communis</i>. Hand after hand of palmate leaves, medicine and poison in the same spiky pod.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="palilalia-word.html">
+    <div class="thumb"><img src="palilalia-surreal.jpg" alt="A hooded figure on a cracked salt flat at dusk, words rising as ribbons of text, with ghost-ribbons of echoes streaming in from the horizon"></div>
+    <div class="meta">
+      <div class="date">October 13, 2026</div>
+      <div class="word">PALILALIA</div>
+      <div class="phon">/ˌpælɪˈleɪliə/ · pal-ih-LAY-lee-uh · noun</div>
+      <p class="line">Greek <i>palin</i> ("again") + <i>lalia</i> ("speech, babble") — the involuntary repetition of one's <i>own</i> words, each echo arriving faster and quieter than the last. Say it twice and you've demonstrated the symptom.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="needfire-word.html">
+    <div class="thumb"><img src="needfire-surreal.jpg" alt="A ritual bonfire on a night moor, its smoke resolving into a ghost-herd of cattle"></div>
+    <div class="meta">
+      <div class="date">October 12, 2026</div>
+      <div class="word">NEEDFIRE</div>
+      <div class="phon">/ˈniːdˌfaɪər/ · NEED-fire · noun</div>
+      <p class="line">Old English <i>nīedfȳr</i> — a ritual fire kindled by friction in a time of calamity, lit to protect the herd from plague while every other hearth in the district stood cold.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="mneme-word.html">
+    <div class="thumb"><img src="mneme-surreal.jpg" alt="Mneme walking a midnight library where the books are blank but their shadows are full of writing"></div>
+    <div class="meta">
+      <div class="date">October 11, 2026</div>
+      <div class="word">MNEME</div>
+      <div class="phon">/ˈniːmiː/ · NEE-mee · noun</div>
+      <p class="line">The personification of memory — one of the three elder Muses, before the famous nine. She survives by hiding inside other words: <i>mnemonic</i>, <i>amnesia</i>, <i>anamnesis</i>.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="heeltree-word.html">
+    <div class="thumb"><img src="heeltree-surreal.jpg" alt="A weathered wooden draft bar lying in a harrowed field at dusk, the clouds above combed into furrow-rows"></div>
+    <div class="meta">
+      <div class="date">October 10, 2026</div>
+      <div class="word">HEELTREE</div>
+      <div class="phon">/ˈhiːltriː/ · HEEL-tree · noun</div>
+      <p class="line">The whiffletree of a harrow — the draft bar at the back of the harrow. The clouds overhead got combed into furrows to match.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="dishdasha-word.html">
+    <div class="thumb"><img src="dishdasha-surreal.jpg" alt="A white dishdasha on a tailor's stand in an empty desert at dusk, its shadow falling toward the sun"></div>
+    <div class="meta">
+      <div class="date">October 9, 2026</div>
+      <div class="word">DISHDASHA</div>
+      <div class="phon">/ˈdɪʃˌdæʃə/ · dish-DASH-uh · noun</div>
+      <p class="line">Arabic <i>dishdāsha</i> — an ankle-length, long-sleeved robe worn by men across the Arab world. One robe, three names: dishdasha, thawb, kandura.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="guignol-word.html">
+    <div class="thumb"><img src="guignol-surreal.jpg" alt="The Grand-Guignol theatre in 1925, a horror play on stage, the carved chapel angels above the orchestra with their hands pressed over their eyes"></div>
+    <div class="meta">
+      <div class="date">October 7, 2026</div>
+      <div class="word">GUIGNOL</div>
+      <div class="phon">/ɡiːnˈjɔːl/ · geen-YOL · noun</div>
+      <p class="line">The Lyonnaise puppet hero; Grand Guignol — the Paris theatre (1897–1962) famous for naturalistic horror. The carved chapel angels cover their eyes.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="borborygmus-word.html">
+    <div class="thumb"><img src="borborygmus-surreal.jpg" alt="A translucent stomach-cloud beast of coiled intestinal tubing floating above an Edwardian breakfast table, wearing a black bow tie, digestive gas rising as tiny brass zeppelins"></div>
+    <div class="meta">
+      <div class="date">October 7, 2026</div>
+      <div class="word">BORBORYGMUS</div>
+      <div class="phon">/ˌbɔːrbəˈrɪɡməs/ · bor-buh-RIG-muhs · noun</div>
+      <p class="line">Greek <i>borborygmos</i> — intestinal rumbling caused by gas moving through the intestines. The word that rumbles, rendered as a purring stomach-cloud in a bow tie.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="potoroo-word.html">
+    <div class="thumb"><img src="potoroo-surreal.jpg" alt="Surreal potoroo illustration"></div>
+    <div class="meta">
+      <div class="date">October 6, 2026</div>
+      <div class="word">POTOROO</div>
+      <div class="phon">/ˌpɒtəˈruː/ · pot-uh-ROO · noun</div>
+      <p class="line">Dharug <i>buduru</i> — a small nocturnal marsupial, a rat-kangaroo; it eats underground truffles and scatters their spores, gardening the forest.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <a class="entry" href="marshalsea-word.html">
+    <div class="thumb"><img src="marshalsea-surreal.jpg" alt="The Marshalsea debtors' prison yard in 1824 seen through iron bars, a boy offering cheese to a mouse, lightning over Southwark"></div>
+    <div class="meta">
+      <div class="date">October 5, 2026</div>
+      <div class="word">MARSHALSEA</div>
+      <div class="phon">/ˈmɑːrʃəlsiː/ · MAR-shul-see · noun</div>
+      <p class="line">Middle English <i>marschal</i> (marshal) + <i>-see</i> (jurisdiction) — the Marshal's court, and its prison; Dickens's father was jailed there for a £40 debt in 1824.</p>
+      <div class="go">Open the word →</div>
+    </div>
+  </a>
+
+  <footer>
+    updated nightly, after the dreaming is done
+  </footer>
+</div>
+</body>
+</html>
