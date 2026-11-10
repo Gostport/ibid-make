@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- loligo-word v1.0 — Nov 9, 2026 (Blossom Night 16) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOLIGO — The Squid With a Roman Name</title>
+<style>
+  :root{
+    --ink:#07131c;
+    --ink2:#0c1e2a;
+    --parchment:#d9e9e2;
+    --parchment-dim:#93a89e;
+    --gold:#e08a3c;
+    --star:#7a8b5a;
+    --ash:#7e938a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #0f2c3d 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(224,138,60,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #1f4152;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#cfe0d8}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #1f4152;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#081a26;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#12303f}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #1f4152;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#081a26;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#b9cec4}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#081a26;border:1px solid #1f4152;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#1a0e02}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#cfe0d8}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#ecd9b0;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#081a26;border:1px solid #1f4152;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#141f12}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#050f16;border:1px dashed #2c5a70;border-radius:8px;
+    padding:20px;font-size:15px;color:#cfe0d8;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #1f4152}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">LOLIGO</h1>
+    <div class="phonetic">/loʊˈlaɪɡoʊ/ &nbsp;·&nbsp; lo-LYE-go &nbsp;·&nbsp; noun · Latin: "squid"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="loligo-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Loligo</strong> — a genus of slender inshore squid: a torpedo-shaped mantle, fins that meet at the tail end, eight arms and two long feeding tentacles. The classic calamari squid of coasts all over the world; <i>Loligo vulgaris</i>, the European squid, is the species the whole genus is named from.</p>
+    <p class="plain">Stress the middle — <b>lo-LYE-go</b>. Six letters that start like a laugh and end like a command. It is <i>not</i> laughing at you: the Romans named this animal two thousand years before the internet taught LOL to mean anything, and the resemblance is pure accident — a modern joke wearing an ancient word.</p>
+    <p class="hint">Straight from Latin <i>loligo</i> (also spelled <i>lolligo</i>) — a squid, a cuttlefish — the word Pliny the Elder used in his <i>Natural History</i>. Science simply kept the Roman name: Lamarck raised it to a genus in 1798.</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Three syllables, three beats of a squid jetting backwards — tap each part:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">LO-</div>
+        <div class="gloss"><b>The launch.</b> — A long, open O to push off with. Squid swim tail-first, driven by a jet of water; the word starts the same way, all thrust: <i>lo—</i>, and you're already moving.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-LY-</div>
+        <div class="gloss"><b>The stress.</b> — The syllable that takes the weight: lo-<i>LYE</i>-go. It's also the word's only sharp edge, a Y-sound spike in a word otherwise made of round vowels and liquid L's — the beak hidden in the soft body.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-GO</div>
+        <div class="gloss"><b>The departure.</b> — It ends on the English word for leaving, which is exactly the squid's whole strategy: ink, jet, <i>gone</i>. Roman noun, English exit.</div>
+      </div>
+    </div>
+    <p class="hint">Lo- launches it, -ly- stresses it, -go sends it: a word shaped like the animal's escape.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>One animal, two careers, and a name that keeps outliving its filing system:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Animal</h3>
+        <p>An inshore squid built like a fountain pen: long mantle, fins frilling the tail, skin alive with chromatophores that repaint it in waves of amber and rust. It hovers, darts, jets backwards, and signs its exit in ink.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Double Life</h3>
+        <p>Dinner and data. Most of the world's calamari is loligo and its close kin — and the longfin squid <i>Loligo pealeii</i> (now filed as <i>Doryteuthis pealeii</i>) handed neuroscience the giant axon, a nerve fiber thick enough to wire up by hand.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Reshuffle</h3>
+        <p>Taxonomists keep moving species out — to <i>Doryteuthis</i>, to <i>Uroteuthis</i> — and the genus shrinks around its founding classics. The name doesn't care. Loligo stays on the menus, in the textbooks, and in a Roman's notebook from 77 AD.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of the Squid With a Roman Name</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">77 AD</button>
+      <button class="tl-btn" data-era="1">1798</button>
+      <button class="tl-btn" data-era="2">1952</button>
+      <button class="tl-btn" data-era="3">Today</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">77 AD</span> — Pliny Writes It Down</h3>
+      <p>Pliny the Elder's <i>Natural History</i> catalogs the <i>loligo</i> — and swears there is a kind, the flying loligo, that leaps clear out of the sea. He was right: some squid really do glide above the waves. Rome had the word, and the strangest fact about the animal, nineteen centuries early.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1798</span> — Lamarck Files It</h3>
+      <p>As the Linnaean order sweeps through zoology, Lamarck raises <i>Loligo</i> from a Roman common noun to a formal genus — one of the oldest animal names in continuous scientific service, carried over almost unchanged from the language of fishermen and fish markets.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">1952</span> — The Squid Teaches the Nerve</h3>
+      <p>Hodgkin and Huxley thread electrodes into the giant axon of a loligo and publish the mathematics of the nerve impulse — how every signal in every animal brain, including yours reading this, actually fires. The work wins the Nobel Prize in 1963. A squid's wiring diagram became neuroscience's founding document.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Today</span> — Calamari, With Footnotes</h3>
+      <p>The genus is smaller than it was — the reshuffle moved many species out — but <i>loligo</i> is the rare scientific name that escaped into ordinary life: on menus, in bait shops, and tonight, on a Blossom board, spelled out of seven letters over a sea of -ing words.</p>
+    </div>
+    <div class="rule">
+      Rome named it, Lamarck filed it, and its nerve taught us how all nerves fire.
+      <cite>— loligo, in one line</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A loligo is…</p>
+      <button class="opt">A Hawaiian massage technique</button>
+      <button class="opt">A slender inshore squid</button>
+      <button class="opt">A number with thirty zeros</button>
+      <button class="opt">The angle point of the jaw</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>2. The word <i>loligo</i> comes from…</p>
+      <button class="opt">Hawaiian, "to knead and rub"</button>
+      <button class="opt">Greek, "laughter"</button>
+      <button class="opt">Japanese, "lantern"</button>
+      <button class="opt">Latin — the Romans' word for squid</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. Loligo's great gift to science was…</p>
+      <button class="opt">Its giant nerve axon — thick enough to wire with electrodes</button>
+      <button class="opt">Being the first animal sent into orbit</button>
+      <button class="opt">Ink used in the first printed books</button>
+      <button class="opt">A shell that inspired submarine hulls</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>4. Pliny's "flying" loligo was said to…</p>
+      <button class="opt">Sing at dawn</button>
+      <button class="opt">Glow as it swam</button>
+      <button class="opt">Leap clear out of the sea</button>
+      <button class="opt">Walk on shore at night</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="loligo-surreal.jpg" alt="A long amber-red loligo squid floating motionless in dawn air above a calm, misty sea, fins rippling, tentacles trailing; below, an old fisherman in a small wooden rowboat baits a hook without looking up">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: dawn over a calm sea, soft mist. A loligo squid — long, slender, torpedo-shaped, amber-red shimmering skin, triangular fins at the tail end and two long tentacles trailing among eight shorter arms — floats motionless in the air a few feet above the water, exactly as if the sky were its ocean, fins gently rippling. Below it, an old fisherman in a small wooden rowboat calmly baits a hook, not looking up, perfectly unbothered. One quiet impossibility: the squid is swimming through the air, and nobody finds it strange. Soft golden morning light, gentle mist on the water, cinematic composition, soft film grain, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> board · loligo, the squid that swims the sky<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('loligo');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — a slender inshore squid: torpedo mantle, fins at the tail, eight arms and two long tentacles. The massage was lomilomi, also on tonight's board.",
+     "Not quite — the massage is lomilomi, the huge number is nonillion, and the jaw point is the gonion, all neighbors on tonight's board. The loligo is the squid."],
+    ["Correct — pure Latin, the Romans' own word for the animal, in print since Pliny in 77 AD.",
+     "Not quite — no Greek laughter in it, however it looks. Loligo is Latin for squid, straight out of Pliny."],
+    ["Correct — the giant axon of Loligo pealeii let Hodgkin and Huxley work out how nerve impulses fire. Nobel Prize, 1963.",
+     "Not quite — no orbit, no printing ink, no submarines. It was the giant axon: a nerve fiber thick enough to thread a wire into."],
+    ["Correct — Pliny's flying loligo really did leap from the sea, and some squid still glide above the waves today.",
+     "Not quite — no singing, glowing, or shore leave in Pliny's account. The flying loligo leapt clear out of the water."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — swimming in it. Pliny would approve." :
+          score === 3 ? "3 / 4 — one fact still in the net. Nearly landed." :
+          "0–2 / 4 — the details jetted off backwards. A re-read will ink them in.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
