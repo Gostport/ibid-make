@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- hooroosh-word v1.0 — Nov 11, 2026 (Blossom Night 17) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOOROOSH — The Word That Sounds Like the Thing</title>
+<style>
+  :root{
+    --ink:#14161c;
+    --ink2:#1c1f27;
+    --parchment:#e6dfcd;
+    --parchment-dim:#a39a83;
+    --gold:#d9a441;
+    --star:#7a8b5a;
+    --ash:#8b8fa3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.65;
+    background-image:radial-gradient(ellipse at 50% -10%, #2b2f3a 0%, var(--ink) 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  .backnav{font-size:13px;letter-spacing:3px;margin-bottom:18px}
+  .backnav a{color:var(--parchment-dim);text-decoration:none}
+  .backnav a:hover{color:var(--parchment)}
+  header{text-align:center;padding:64px 0 10px;position:relative}
+  .kicker{
+    font-size:12px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--ash);margin-bottom:18px;
+  }
+  h1.wordmark{
+    font-size:clamp(40px,10vw,84px);
+    letter-spacing:4px;color:var(--parchment);
+    text-shadow:0 0 40px rgba(217,164,65,.45);
+    font-weight:400;
+  }
+  .phonetic{
+    font-style:italic;color:var(--parchment-dim);font-size:20px;margin:10px 0 4px;
+  }
+  .say-btn{
+    margin-top:14px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:inherit;font-size:14px;letter-spacing:2px;
+    padding:10px 26px;border-radius:30px;cursor:pointer;transition:.25s;
+  }
+  .say-btn:hover{background:var(--gold);color:var(--ink)}
+  section.card{
+    background:var(--ink2);border:1px solid #343947;border-radius:10px;
+    padding:30px 30px;margin-top:34px;position:relative;
+  }
+  section.card::before{
+    content:"";position:absolute;top:0;left:30px;right:30px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+  }
+  h2{
+    font-size:15px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:16px;font-weight:400;
+  }
+  .def{font-size:21px;font-style:italic}
+  .def strong{color:var(--parchment);font-style:normal}
+  .plain{margin-top:16px;font-size:17px;color:#d5cdb6}
+  .plain b{color:var(--gold);font-weight:normal}
+  .hint{font-size:13px;color:var(--ash);font-style:italic;margin-top:10px}
+  .anatomy{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .part{
+    border:1px solid #343947;border-radius:8px;padding:14px 18px;cursor:pointer;
+    transition:.2s;flex:1;min-width:200px;background:#101218;
+  }
+  .part:hover{border-color:var(--gold)}
+  .part.active{border-color:var(--gold);background:#262a35}
+  .part .frag{font-size:26px;color:var(--gold);letter-spacing:1px}
+  .part .gloss{font-size:14px;color:var(--ash);margin-top:6px;display:none}
+  .part.active .gloss{display:block}
+  .machine{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .mcard{
+    border:1px solid #343947;border-radius:8px;padding:16px 18px;
+    flex:1;min-width:200px;background:#101218;
+  }
+  .mcard h3{color:var(--gold);font-size:19px;font-weight:400;margin-bottom:8px}
+  .mcard p{font-size:14px;color:#c6bda4}
+  .tl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tl-btn{
+    background:#101218;border:1px solid #343947;color:var(--parchment-dim);
+    font-family:inherit;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;
+  }
+  .tl-btn.active{background:var(--gold);border-color:var(--gold);color:#1a1206}
+  .tl-panel{display:none;animation:fade .35s}
+  .tl-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .tl-panel h3{color:var(--parchment);font-size:22px;margin-bottom:8px;font-weight:400}
+  .tl-panel h3 .yr{color:var(--gold);font-style:italic}
+  .tl-panel p{color:#d5cdb6}
+  .rule{
+    border-left:3px solid var(--gold);padding:6px 0 6px 20px;margin:18px 0;
+    font-style:italic;font-size:19px;color:#ecd9b0;
+  }
+  .rule cite{display:block;font-style:normal;font-size:13px;color:var(--ash);margin-top:8px}
+  .q{margin-bottom:24px}
+  .q p{font-size:18px;margin-bottom:12px}
+  .opt{
+    display:block;width:100%;text-align:left;background:#101218;border:1px solid #343947;
+    color:var(--parchment);font-family:inherit;font-size:15px;
+    padding:12px 16px;border-radius:8px;margin:8px 0;cursor:pointer;transition:.2s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--gold)}
+  .opt:disabled{cursor:default;opacity:.85}
+  .opt.right{border-color:#4d7c4d;background:#141f12}
+  .opt.wrong{border-color:#a03a3a;background:#221210}
+  .verdict{font-size:14px;font-style:italic;color:var(--ash);margin-top:6px;min-height:22px}
+  #score-line{text-align:center;font-size:17px;color:var(--gold);letter-spacing:1px;margin-top:6px}
+  .seedbox{
+    background:#0a0b0f;border:1px dashed #4a4436;border-radius:8px;
+    padding:20px;font-size:15px;color:#d5cdb6;font-style:italic;
+  }
+  .seedimg{width:100%;border-radius:8px;margin-bottom:16px;border:1px solid #343947}
+  .seedcap{font-size:13px;color:var(--ash);font-style:italic;margin:-8px 0 16px}
+  .copy-btn{
+    margin-top:14px;background:var(--gold);border:none;color:var(--ink);
+    font-family:inherit;font-size:13px;letter-spacing:2px;padding:10px 24px;
+    border-radius:6px;cursor:pointer;font-weight:bold;
+  }
+  .copy-btn:hover{filter:brightness(1.1)}
+  footer{text-align:center;margin-top:60px;color:var(--ash);font-size:13px;font-style:italic}
+  footer .blossom{color:var(--parchment-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backnav"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+
+  <header>
+    <div class="kicker">Tonight's Blossom word</div>
+    <h1 class="wordmark">HOOROOSH</h1>
+    <div class="phonetic">/həˈɹuːʃ/ &nbsp;·&nbsp; huh-ROOSH &nbsp;·&nbsp; noun · imitative: "a commotion"</div>
+    <button class="say-btn" id="sayBtn">🔊 HEAR IT</button>
+    <audio id="sayAudio" src="hooroosh-say.mp3" preload="auto"></audio>
+  </header>
+
+  <section class="card">
+    <h2>The Definition, Translated</h2>
+    <p class="def"><strong>Hooroosh</strong> — a wild, hurried, or excited state or situation: confusion, commotion, uproar. Merriam-Webster's example is pure dockside: <i>"such a hooroosh as we had getting to the docks."</i></p>
+    <p class="plain">Stress the back — <b>huh-ROOSH</b>. This word has no ancestors. Merriam-Webster files its etymology under one word: <i>imitative</i>. No Latin root, no Greek parent — somebody heard a crowd surge, a storm hit a deck, a stampede start, and simply spelled the noise. The word <i>is</i> the sound of the thing it names.</p>
+    <p class="hint">Dictionaries mark it <i>dated</i> — old-fashioned, not gone. Its most famous appearance is in <i>Moby-Dick</i> (1851), chapter 120, in the middle of a storm: "What a hooroosh aloft there!"</p>
+  </section>
+
+  <section class="card">
+    <h2>Anatomy of the Word</h2>
+    <p>Three syllables, one rising roar — tap each part:</p>
+    <div class="anatomy">
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">HOO-</div>
+        <div class="gloss"><b>The whoop.</b> — The shout going up: <i>hoo—</i>, the first cry when something spills, breaks, or bolts. Every commotion starts with somebody yelling.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-ROO-</div>
+        <div class="gloss"><b>The rumble.</b> — The stressed middle, all roar and rush: boots on planks, water over the side, the crowd joining in. This is the syllable that carries the weight: huh-<i>ROOSH</i>.</div>
+      </div>
+      <div class="part" onclick="this.classList.toggle('active')">
+        <div class="frag">-SH</div>
+        <div class="gloss"><b>The spray.</b> — It ends in a hiss: sea-spray, rain on canvas, and — conveniently — the same sound you make to quiet it all down. The hooroosh contains its own <i>shush</i>.</div>
+      </div>
+    </div>
+    <p class="hint">A whoop, a rumble, and a hiss of spray: the whole storm in eight letters.</p>
+  </section>
+
+  <section class="card">
+    <h2>What It Is</h2>
+    <p>A word born from noise itself, in three parts:</p>
+    <div class="machine">
+      <div class="mcard">
+        <h3>I. The Sound</h3>
+        <p>Onomatopoeia with muddy boots. Like <i>whoosh</i> and <i>hurrah</i>, hooroosh wasn't coined by a scholar — it condensed out of the air wherever men worked loud, dangerous jobs and needed a word as fast as the event.</p>
+      </div>
+      <div class="mcard">
+        <h3>II. The Scene</h3>
+        <p>Docks, decks, and stampedes. The classic hooroosh is sudden and physical: cargo shifting, a squall striking the rigging, everyone moving at once in different directions — hurry and confusion at the same time, which is exactly Merriam-Webster's definition.</p>
+      </div>
+      <div class="mcard">
+        <h3>III. The Afterlife</h3>
+        <p>Dictionaries shelve it as <i>dated</i>, and the modern world files its hoorooshes under other names. But word games keep it in circulation — it sat on tonight's Blossom board, eight letters of pure commotion, waiting to be noticed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>A Short History of a Word Made of Noise</h2>
+    <div class="tl-nav">
+      <button class="tl-btn active" data-era="0">1851</button>
+      <button class="tl-btn" data-era="1">The Word History</button>
+      <button class="tl-btn" data-era="2">Dated, Not Dead</button>
+      <button class="tl-btn" data-era="3">Tonight</button>
+    </div>
+    <div class="tl-panel active">
+      <h3><span class="yr">1851</span> — Melville Puts It in the Storm</h3>
+      <p>Chapter 120 of <i>Moby-Dick</i>, "The Deck in the Storm": the Pequod is being worked over by a typhoon, men are aloft in the rigging, and the cry goes up — <i>"What a hooroosh aloft there!"</i> The most literary novel in America paused to spell a noise, and the noise became literature.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">The Word History</span> — Etymology: Imitative</h3>
+      <p>Ask the dictionary where hooroosh comes from and it shrugs happily: <i>imitative</i>. No borrowing, no root, no slow drift from an older tongue. It is a transcription — the 19th century hearing itself get loud and writing down what that sounded like.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Dated, Not Dead</span> — The Label It Wears Now</h3>
+      <p>Wiktionary and the big dictionaries label hooroosh <i>dated</i>: a word your great-grandfather's shipmates would have used without thinking. Dated words aren't removed, though — they're kept on the shelf, and every so often a game board deals one back into play.</p>
+    </div>
+    <div class="tl-panel">
+      <h3><span class="yr">Tonight</span> — Eight Letters of Commotion</h3>
+      <p>On tonight's Blossom board it did what it has always done: made a small, cheerful uproar among quieter words — three O's deep, ending in spray, and impossible to say without raising your voice a little.</p>
+    </div>
+    <div class="rule">
+      "What a hooroosh aloft there!"
+      <cite>— Herman Melville, <i>Moby-Dick</i> (1851), ch. 120</cite>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Prove You Were Paying Attention</h2>
+    <div class="q" data-answer="1">
+      <p>1. A hooroosh is…</p>
+      <button class="opt">A knot used to secure cargo on a whaling ship</button>
+      <button class="opt">A wild, hurried commotion — a state of confusion</button>
+      <button class="opt">A stiff wind blowing off the docks</button>
+      <button class="opt">A basket for carrying fish ashore</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="3">
+      <p>2. The word <i>hooroosh</i> comes from…</p>
+      <button class="opt">Latin <i>hora</i>, "an hour of panic"</button>
+      <button class="opt">Greek <i>choros</i>, "a dancing crowd"</button>
+      <button class="opt">French <i>ruche</i>, "a ruffle"</button>
+      <button class="opt">Imitation — it copies the sound of the thing itself</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="0">
+      <p>3. Melville used the word in…</p>
+      <button class="opt"><i>Moby-Dick</i> — "What a hooroosh aloft there!"</button>
+      <button class="opt"><i>Typee</i>, his South Seas adventure</button>
+      <button class="opt"><i>The Confidence-Man</i>, his riverboat satire</button>
+      <button class="opt"><i>Billy Budd</i>, his last novella</button>
+      <div class="verdict"></div>
+    </div>
+    <div class="q" data-answer="2">
+      <p>4. Dictionaries today label hooroosh…</p>
+      <button class="opt">Current slang, coined at sea</button>
+      <button class="opt">Obsolete — dropped from the dictionary entirely</button>
+      <button class="opt">Dated — old-fashioned, but still listed</button>
+      <button class="opt">A technical term used only by sailors</button>
+      <div class="verdict"></div>
+    </div>
+    <div id="score-line"></div>
+  </section>
+
+  <section class="card">
+    <h2>As an Image Seed</h2>
+    <p style="margin-bottom:14px">You mine Blossom for prompt seeds — here's this one, ready to plant:</p>
+    <img class="seedimg" src="hooroosh-surreal.jpg" alt="A glassy spiral of seawater frozen motionless in the air above a misty dawn whaling dock, carrying tricorn hats, loose papers, rope coils and seagulls in its whirl; below, three sailors calmly work — one rolling a barrel, one coiling rope, one carrying a crate — not looking up; a tall ship rides at anchor in the fog behind them">
+    <p class="seedcap">Tonight's render — spot the quiet impossibility.</p>
+    <div class="seedbox" id="seedText">Surreal photorealistic scene: a 19th-century whaling dock at dawn, calm sea, a tall ship at anchor, soft mist. Everything is still and quiet — except a single swirl of commotion frozen motionless in the air above the dock: hats, loose papers, seagulls, coils of rope and arcs of seawater caught mid-whirl in a spiral, suspended as if a storm were preserved inside glass. Below, sailors calmly go about their work on the dock, not looking up, perfectly unbothered. One quiet impossibility: the commotion hangs frozen in the air, and nobody finds it strange. Soft grey-gold morning light, cinematic composition, gentle film grain, no text, no watermark.</div>
+    <button class="copy-btn" id="copySeed">COPY PROMPT</button>
+  </section>
+
+  <footer>
+    grown from tonight's <span class="blossom">Blossom</span> board · hooroosh, the commotion you can hear<br>
+    the funny-looking ones are always load-bearing
+    <div class="backnav" style="margin:18px 0 0"><a href="index.html">&larr; IBID</a> &nbsp;&middot;&nbsp; <a href="words.html">&larr; ALL WORDS</a></div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('sayBtn').addEventListener('click', () => {
+    const a = document.getElementById('sayAudio');
+    try {
+      a.currentTime = 0;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => speakFallback());
+    } catch(e){ speakFallback(); }
+  });
+  function speakFallback(){
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance('hooroosh');
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  const btns = document.querySelectorAll('.tl-btn');
+  const panels = document.querySelectorAll('.tl-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    panels[+b.dataset.era].classList.add('active');
+  }));
+  let score = 0, answered = 0;
+  const verdicts = [
+    ["Correct — a wild, hurried, excited state: confusion, commotion, uproar. Merriam-Webster's own example is the scramble getting to the docks.",
+     "Not quite — no knots, winds, or baskets. A hooroosh is the commotion itself: wild, hurried, confused."],
+    ["Correct — the dictionary's whole etymology is one word: imitative. The word copies the sound of a commotion.",
+     "Not quite — no Latin, Greek, or French in it at all. Hooroosh is imitative: somebody spelled the noise."],
+    ["Correct — Moby-Dick, chapter 120, in the typhoon: 'What a hooroosh aloft there!'",
+     "Not quite — all four are Melville, but the hooroosh is in Moby-Dick, shouted aloft during the storm in chapter 120."],
+    ["Correct — dated: old-fashioned, still listed, and still dealt out by word games like tonight's Blossom board.",
+     "Not quite — not current slang, not dropped, and never sailors-only. The dictionaries label it dated."]
+  ];
+  document.querySelectorAll('.q').forEach((q, qi) => {
+    const opts = q.querySelectorAll('.opt');
+    const verdict = q.querySelector('.verdict');
+    const right = +q.dataset.answer;
+    opts.forEach((o, oi) => o.addEventListener('click', () => {
+      opts.forEach(x => x.disabled = true);
+      answered++;
+      if (oi === right) { o.classList.add('right'); score++; verdict.innerHTML = verdicts[qi][0]; }
+      else { o.classList.add('wrong'); opts[right].classList.add('right'); verdict.innerHTML = verdicts[qi][1]; }
+      if (answered === 4) {
+        document.getElementById('score-line').textContent =
+          score === 4 ? "4 / 4 — you heard the whole storm. Melville would approve." :
+          score === 3 ? "3 / 4 — one detail still overboard. Nearly weathered." :
+          "0–2 / 4 — the facts scattered in the commotion. A re-read will gather them.";
+      }
+    }));
+  });
+  document.getElementById('copySeed').addEventListener('click', async (e) => {
+    const t = document.getElementById('seedText').textContent;
+    try { await navigator.clipboard.writeText(t); }
+    catch(err){
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    e.target.textContent = 'COPIED ✓';
+    setTimeout(() => e.target.textContent = 'COPY PROMPT', 1600);
+  });
+</script>
+</body>
+</html>
