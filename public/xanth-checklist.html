@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xanth Reading Checklist — 49 novels</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #1a2410; color: #f2f0e4; }
+  header { position: sticky; top: 0; background: #26331a; padding: 12px 16px; z-index: 5;
+           border-bottom: 2px solid #c9a227; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  .sub { color: #c8cdb4; font-size: 13px; margin-bottom: 10px; max-width: 640px; }
+  .barwrap { background: #141d0b; border: 1px solid #4a5a33; border-radius: 6px; height: 18px;
+              max-width: 640px; overflow: hidden; }
+  #bar { background: #c9a227; height: 100%; width: 0%; transition: width .3s; }
+  #count { font-size: 13px; color: #c8cdb4; margin-top: 6px; }
+  main { max-width: 680px; margin: 0 auto; padding: 10px 14px 40px; }
+  .row { display: flex; align-items: baseline; gap: 8px; padding: 7px 8px; cursor: pointer;
+          border-bottom: 1px solid #2e3d1f; }
+  .row:hover { background: #222f16; }
+  .box { width: 17px; height: 17px; accent-color: #c9a227; flex: none; position: relative; top: 2px; }
+  .num { color: #8fa072; width: 2.2em; text-align: right; flex: none; font-size: 13px; }
+  .title { flex: 1; }
+  .year { color: #8fa072; font-size: 13px; }
+  .note { color: #c9a227; font-size: 12px; white-space: nowrap; }
+  .note.next { color: #7fc97f; }
+  .row.done .title { color: #8fa072; text-decoration: line-through; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📚 Xanth — Kip's Reading Checklist</h1>
+  <div class="sub">All 49 novels by Piers Anthony, in order. The first 15 start ticked — that's your
+  first pass, ending at <i>The Color of Her Panties</i> (1992). No restart needed: after the early books the
+  cast rotates well beyond Bink's family, and each later book reintroduces its own quest. Tick them off as you go;
+  the page remembers on this device.</div>
+  <div class="barwrap"><div id="bar"></div></div>
+  <div id="count"></div>
+</header>
+<main>
+<label class="row" data-n="1">
+  <input type="checkbox" class="box" data-n="1">
+  <span class="num">1.</span>
+  <span class="title">A Spell for Chameleon</span>
+  <span class="year">1977</span>
+</label>
+<label class="row" data-n="2">
+  <input type="checkbox" class="box" data-n="2">
+  <span class="num">2.</span>
+  <span class="title">The Source of Magic</span>
+  <span class="year">1979</span>
+</label>
+<label class="row" data-n="3">
+  <input type="checkbox" class="box" data-n="3">
+  <span class="num">3.</span>
+  <span class="title">Castle Roogna</span>
+  <span class="year">1979</span>
+</label>
+<label class="row" data-n="4">
+  <input type="checkbox" class="box" data-n="4">
+  <span class="num">4.</span>
+  <span class="title">Centaur Aisle</span>
+  <span class="year">1981</span>
+</label>
+<label class="row" data-n="5">
+  <input type="checkbox" class="box" data-n="5">
+  <span class="num">5.</span>
+  <span class="title">Ogre, Ogre</span>
+  <span class="year">1982</span>
+</label>
+<label class="row" data-n="6">
+  <input type="checkbox" class="box" data-n="6">
+  <span class="num">6.</span>
+  <span class="title">Night Mare</span>
+  <span class="year">1983</span>
+</label>
+<label class="row" data-n="7">
+  <input type="checkbox" class="box" data-n="7">
+  <span class="num">7.</span>
+  <span class="title">Dragon on a Pedestal</span>
+  <span class="year">1983</span>
+</label>
+<label class="row" data-n="8">
+  <input type="checkbox" class="box" data-n="8">
+  <span class="num">8.</span>
+  <span class="title">Crewel Lye: A Caustic Yarn</span>
+  <span class="year">1985</span>
+</label>
+<label class="row" data-n="9">
+  <input type="checkbox" class="box" data-n="9">
+  <span class="num">9.</span>
+  <span class="title">Golem in the Gears</span>
+  <span class="year">1986</span>
+</label>
+<label class="row" data-n="10">
+  <input type="checkbox" class="box" data-n="10">
+  <span class="num">10.</span>
+  <span class="title">Vale of the Vole</span>
+  <span class="year">1987</span>
+</label>
+<label class="row" data-n="11">
+  <input type="checkbox" class="box" data-n="11">
+  <span class="num">11.</span>
+  <span class="title">Heaven Cent</span>
+  <span class="year">1988</span>
+</label>
+<label class="row" data-n="12">
+  <input type="checkbox" class="box" data-n="12">
+  <span class="num">12.</span>
+  <span class="title">Man from Mundania</span>
+  <span class="year">1989</span>
+</label>
+<label class="row" data-n="13">
+  <input type="checkbox" class="box" data-n="13">
+  <span class="num">13.</span>
+  <span class="title">Isle of View</span>
+  <span class="year">1990</span>
+</label>
+<label class="row" data-n="14">
+  <input type="checkbox" class="box" data-n="14">
+  <span class="num">14.</span>
+  <span class="title">Question Quest</span>
+  <span class="year">1991</span>
+</label>
+<label class="row" data-n="15">
+  <input type="checkbox" class="box" data-n="15">
+  <span class="num">15.</span>
+  <span class="title">The Color of Her Panties</span>
+  <span class="year">1992</span> <span class="note">← where you stopped</span>
+</label>
+<label class="row" data-n="16">
+  <input type="checkbox" class="box" data-n="16">
+  <span class="num">16.</span>
+  <span class="title">Demons Don&#x27;t Dream</span>
+  <span class="year">1993</span> <span class="note next">← next up</span>
+</label>
+<label class="row" data-n="17">
+  <input type="checkbox" class="box" data-n="17">
+  <span class="num">17.</span>
+  <span class="title">Harpy Thyme</span>
+  <span class="year">1994</span>
+</label>
+<label class="row" data-n="18">
+  <input type="checkbox" class="box" data-n="18">
+  <span class="num">18.</span>
+  <span class="title">Geis of the Gargoyle</span>
+  <span class="year">1995</span>
+</label>
+<label class="row" data-n="19">
+  <input type="checkbox" class="box" data-n="19">
+  <span class="num">19.</span>
+  <span class="title">Roc and a Hard Place</span>
+  <span class="year">1995</span>
+</label>
+<label class="row" data-n="20">
+  <input type="checkbox" class="box" data-n="20">
+  <span class="num">20.</span>
+  <span class="title">Yon Ill Wind</span>
+  <span class="year">1996</span>
+</label>
+<label class="row" data-n="21">
+  <input type="checkbox" class="box" data-n="21">
+  <span class="num">21.</span>
+  <span class="title">Faun &amp; Games</span>
+  <span class="year">1997</span>
+</label>
+<label class="row" data-n="22">
+  <input type="checkbox" class="box" data-n="22">
+  <span class="num">22.</span>
+  <span class="title">Zombie Lover</span>
+  <span class="year">1998</span>
+</label>
+<label class="row" data-n="23">
+  <input type="checkbox" class="box" data-n="23">
+  <span class="num">23.</span>
+  <span class="title">Xone of Contention</span>
+  <span class="year">1999</span>
+</label>
+<label class="row" data-n="24">
+  <input type="checkbox" class="box" data-n="24">
+  <span class="num">24.</span>
+  <span class="title">The Dastard</span>
+  <span class="year">2000</span>
+</label>
+<label class="row" data-n="25">
+  <input type="checkbox" class="box" data-n="25">
+  <span class="num">25.</span>
+  <span class="title">Swell Foop</span>
+  <span class="year">2001</span>
+</label>
+<label class="row" data-n="26">
+  <input type="checkbox" class="box" data-n="26">
+  <span class="num">26.</span>
+  <span class="title">Up in a Heaval</span>
+  <span class="year">2002</span>
+</label>
+<label class="row" data-n="27">
+  <input type="checkbox" class="box" data-n="27">
+  <span class="num">27.</span>
+  <span class="title">Cube Route</span>
+  <span class="year">2003</span>
+</label>
+<label class="row" data-n="28">
+  <input type="checkbox" class="box" data-n="28">
+  <span class="num">28.</span>
+  <span class="title">Currant Events</span>
+  <span class="year">2004</span>
+</label>
+<label class="row" data-n="29">
+  <input type="checkbox" class="box" data-n="29">
+  <span class="num">29.</span>
+  <span class="title">Pet Peeve</span>
+  <span class="year">2005</span>
+</label>
+<label class="row" data-n="30">
+  <input type="checkbox" class="box" data-n="30">
+  <span class="num">30.</span>
+  <span class="title">Stork Naked</span>
+  <span class="year">2006</span>
+</label>
+<label class="row" data-n="31">
+  <input type="checkbox" class="box" data-n="31">
+  <span class="num">31.</span>
+  <span class="title">Air Apparent</span>
+  <span class="year">2007</span>
+</label>
+<label class="row" data-n="32">
+  <input type="checkbox" class="box" data-n="32">
+  <span class="num">32.</span>
+  <span class="title">Two to the Fifth</span>
+  <span class="year">2008</span>
+</label>
+<label class="row" data-n="33">
+  <input type="checkbox" class="box" data-n="33">
+  <span class="num">33.</span>
+  <span class="title">Jumper Cable</span>
+  <span class="year">2009</span>
+</label>
+<label class="row" data-n="34">
+  <input type="checkbox" class="box" data-n="34">
+  <span class="num">34.</span>
+  <span class="title">Knot Gneiss</span>
+  <span class="year">2010</span>
+</label>
+<label class="row" data-n="35">
+  <input type="checkbox" class="box" data-n="35">
+  <span class="num">35.</span>
+  <span class="title">Well-Tempered Clavicle</span>
+  <span class="year">2011</span>
+</label>
+<label class="row" data-n="36">
+  <input type="checkbox" class="box" data-n="36">
+  <span class="num">36.</span>
+  <span class="title">Luck of the Draw</span>
+  <span class="year">2012</span>
+</label>
+<label class="row" data-n="37">
+  <input type="checkbox" class="box" data-n="37">
+  <span class="num">37.</span>
+  <span class="title">Esrever Doom</span>
+  <span class="year">2013</span>
+</label>
+<label class="row" data-n="38">
+  <input type="checkbox" class="box" data-n="38">
+  <span class="num">38.</span>
+  <span class="title">Board Stiff</span>
+  <span class="year">2013</span>
+</label>
+<label class="row" data-n="39">
+  <input type="checkbox" class="box" data-n="39">
+  <span class="num">39.</span>
+  <span class="title">Five Portraits</span>
+  <span class="year">2014</span>
+</label>
+<label class="row" data-n="40">
+  <input type="checkbox" class="box" data-n="40">
+  <span class="num">40.</span>
+  <span class="title">Isis Orb</span>
+  <span class="year">2016</span>
+</label>
+<label class="row" data-n="41">
+  <input type="checkbox" class="box" data-n="41">
+  <span class="num">41.</span>
+  <span class="title">Ghost Writer in the Sky</span>
+  <span class="year">2017</span>
+</label>
+<label class="row" data-n="42">
+  <input type="checkbox" class="box" data-n="42">
+  <span class="num">42.</span>
+  <span class="title">Fire Sail</span>
+  <span class="year">2019</span>
+</label>
+<label class="row" data-n="43">
+  <input type="checkbox" class="box" data-n="43">
+  <span class="num">43.</span>
+  <span class="title">Jest Right</span>
+  <span class="year">2020</span>
+</label>
+<label class="row" data-n="44">
+  <input type="checkbox" class="box" data-n="44">
+  <span class="num">44.</span>
+  <span class="title">Skeleton Key</span>
+  <span class="year">2021</span>
+</label>
+<label class="row" data-n="45">
+  <input type="checkbox" class="box" data-n="45">
+  <span class="num">45.</span>
+  <span class="title">A Tryst of Fate</span>
+  <span class="year">2021</span>
+</label>
+<label class="row" data-n="46">
+  <input type="checkbox" class="box" data-n="46">
+  <span class="num">46.</span>
+  <span class="title">Six Crystal Princesses</span>
+  <span class="year">2022</span>
+</label>
+<label class="row" data-n="47">
+  <input type="checkbox" class="box" data-n="47">
+  <span class="num">47.</span>
+  <span class="title">Apoca Lips</span>
+  <span class="year">2023</span>
+</label>
+<label class="row" data-n="48">
+  <input type="checkbox" class="box" data-n="48">
+  <span class="num">48.</span>
+  <span class="title">Three Novel Nymphs</span>
+  <span class="year">2025</span>
+</label>
+<label class="row" data-n="49">
+  <input type="checkbox" class="box" data-n="49">
+  <span class="num">49.</span>
+  <span class="title">Knickelpede Knight</span>
+  <span class="year">2026</span>
+</label>
+</main>
+<script>
+const KEY = 'xanthChecklistV1';
+let state = JSON.parse(localStorage.getItem(KEY) || 'null');
+if (!state) { state = {}; for (let n = 1; n <= 15; n++) state[n] = true; }
+const rows = [...document.querySelectorAll('.row')];
+function apply() {
+  let done = 0;
+  for (const r of rows) {
+    const n = r.dataset.n, on = !!state[n];
+    r.querySelector('.box').checked = on;
+    r.classList.toggle('done', on);
+    if (on) done++;
+  }
+  document.getElementById('bar').style.width = (done / rows.length * 100) + '%';
+  document.getElementById('count').textContent =
+    done + ' of ' + rows.length + ' read · ' + (rows.length - done) + ' to go';
+}
+for (const r of rows) {
+  r.querySelector('.box').addEventListener('change', e => {
+    state[r.dataset.n] = e.target.checked;
+    localStorage.setItem(KEY, JSON.stringify(state));
+    apply();
+  });
+}
+apply();
+</script>
+</body>
+</html>
